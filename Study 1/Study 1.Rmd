@@ -1,0 +1,244 @@
+---
+title: "Dissertation Study 1 - Cross National Multilevel Model"
+author: "Dylan Wiwad"
+date: "June 21, 2018"
+output: pdf_document
+---
+This is the supplemental code document for Study 1 in my dissertation. This contains all the code and analysis regarding my handling of the missing data, the linear regressions, and then ultimately the multilevel model of World Values Survey data.
+
+First just loading the data and all required packages.
+
+```{r setup, include=FALSE, echo=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("/users/dylanwiwad/dropbox/work/Dissertation/Writing/Dissertation/Data_and_Code/Study_1/")
+
+# Get the country data
+country <- read.csv("countrydata.csv", header = TRUE)
+# Get the WVS data
+wvs <- read.csv("WVS.csv", header = TRUE)
+
+library(plyr) # For some descriptives
+library(BaylorEdPsych) # For the MCAR missing data testing
+library(mvnmle) # For the MCAR missing data testing
+library(mice) # To run a multiple imputation
+library(ggplot2) # Plotting
+library(nlme) # For running the multilevel model
+```
+
+# Handling of Missing Data
+
+The missing data in the WVS dataset in this particular wave of the WVS comes in three distinct flavors: (1) not asked in survey, (2) not answered, and (3) don't know. I suspected that all the missing data that was simply not asked in the survey is clustered under country. For instance, certain questions simply were not asked in certain countries. To explore this, I created new datasets for each of the key variables and looked at whether all observations from certain countries were missing.
+
+```{r new datasets, echo=TRUE}
+ineq_mis <- wvs[ which(wvs$ineq==-4), ]
+attrib_mis <- wvs[ which(wvs$attrib==-4),]
+id_mis <- wvs[ which(wvs$ideology==-4),]
+inc_mis <- wvs[ which(wvs$inc.lad==-4),]
+relig_mis <- wvs[ which(wvs$relig.import==-4),]
+educ_mis <- wvs[ which(wvs$educ==-4),]
+
+# just get the counts
+count(ineq_mis$country)
+count(attrib_mis$country)
+count(id_mis$country)
+count(inc_mis$country)
+count(relig_mis$country)
+count(educ_mis$country)
+```
+
+According to the codebook for the WVS and the above country codes, all the missing data comes from China, Colombia, Pakistan, Switzerland, Great Britain, Croatia, Japan, Hungary, Slovenia, and the Phillipines.
+
+I'm going to print the country counts in the full data set here to compare:
+
+```{r full counts, echo=TRUE}
+count(wvs$country)
+```
+
+Notice how, for instance, country 586 (Pakistan) was missing 733 observations support for inequality and political ideology but there were only 733 observations in the complete dataset for Pakistan. This suggests that these questions simply were not asked in Pakistan at all. So here I list wise delete all the rows that have any missing values that simply were not asked (despite these values likely not being MCAR due to country clustering).
+
+```{r remove data, echo=TRUE}
+# ideology
+wvs <- wvs[ which(wvs$ideology>=-3), ]
+# Equality
+wvs <- wvs[ which(wvs$ineq>=-3),]
+# Attributions
+wvs <- wvs[ which(wvs$attrib>=-3),]
+wvs <- wvs[ which(wvs$attrib <= 2),] # this also removes people who said neither
+# Sex
+wvs <- wvs[ which(wvs$sex>=-3),]
+# Age
+wvs <- wvs[ which(wvs$age>=-3),]
+# Educ
+wvs <- wvs[ which(wvs$educ>=-3),]
+# Income Ladder
+wvs <- wvs[ which(wvs$inc.lad>=-3),]
+# Religiosity
+wvs <- wvs[ which(wvs$relig.import>=-3),]
+```
+
+Now, with these all removed I need to convert all the missing values (coded as -2 and -1) intro straight NAs.
+
+```{r missing to na, echo=TRUE}
+wvs$ineq[wvs$ineq<=0] <- NA
+wvs$attrib[wvs$attrib<=0] <- NA
+wvs$ideology[wvs$ideology<=0] <- NA
+wvs$sex[wvs$sex<=0] <- NA
+wvs$age[wvs$age<=0] <- NA
+wvs$educ[wvs$educ<=0] <- NA
+wvs$inc.lad[wvs$inc.lad<=0] <- NA
+wvs$relig.import[wvs$relig.import<=0] <- NA
+```
+
+Now with this all dealt with I can move towards testing for MCAR using Little's (1981) protocol. I'll do this in a smaller trimmed dataset containing only the eight variables I actually care about.
+
+```{r MCAR test, echo=TRUE, warning=FALSE}
+key_cols <- c("ineq", "attrib", "ideology", "sex", "age", "educ", "inc.lad", "relig.import")
+key_Vars <- wvs[key_cols]
+
+# Run the MCAR test, as described in Little, 1988
+mcar_test <- LittleMCAR(key_Vars)
+# If I try to print the whole thing it prints out all the data too and hides stuff, so lets just get the key metrics:
+mcar_test$chi.square
+mcar_test$df
+mcar_test$p.value
+mcar_test$missing.patterns
+mcar_test$amount.missing
+```
+
+Thus, we reject the null hypothesis that the data are MCAR. However, the huge sample makes for nearly certain rejection of the null regardless of the truth of the null hypothesis. However, as a logic check, I will also run the regression analysis with imputed data in the full sample after running the analysis with list wise deletion.
+
+Given the huge data set (and reasons discussed in the manuscript) I opted for list wise deletion because it is likely to not introduce any more bias into the analysis than imputing in excess of 20,000 data points.
+
+```{r list wise deletion, echo=TRUE}
+# Ideology
+wvs <- wvs[ which(wvs$ideology>=1), ]
+# Equality
+wvs <- wvs[ which(wvs$ineq>=1),]
+# Attributions
+wvs <- wvs[ which(wvs$attrib==1 | wvs$attrib==2),]
+# Sex
+wvs <- wvs[ which(wvs$sex>=1),]
+# Age
+wvs <- wvs[ which(wvs$age>=1),]
+# Educ
+wvs <- wvs[ which(wvs$educ>=1),]
+# Income Ladder
+wvs <- wvs[ which(wvs$inc.lad>=1),]
+# Religiosity
+wvs <- wvs[ which(wvs$relig.import>=1),]
+```
+
+Thus, I'm not left with a complete cases data set of 40,031 observations.
+
+# Initial Linear Regression
+
+Now getting right to it and converting everything to z-scores and running a simple linear regression of support for economic inequality on attributions for poverty, controlling for political ideology, education, income, religiosity, age, and gender.
+
+```{r linear model, echo=TRUE}
+# Turning everything into z-scores for the regression
+wvs$zineq <- scale(wvs$ineq, center=TRUE,scale=TRUE)
+wvs$zideol <- scale(wvs$ideology, center=TRUE,scale=TRUE)
+wvs$zattrib <- scale(wvs$attrib, center=TRUE,scale=TRUE)
+wvs$zsex <- scale(wvs$sex, center=TRUE,scale=TRUE)
+wvs$zage <- scale(wvs$age, center=TRUE,scale=TRUE)
+wvs$zeduc <- scale(wvs$educ, center=TRUE,scale=TRUE)
+wvs$zinclad <- scale(wvs$inc.lad, center=TRUE,scale=TRUE)
+wvs$zrelig.import <- scale(wvs$relig.import, center=TRUE,scale=TRUE)
+
+summary(lm(zineq~zattrib+zideol+zsex+zage+zeduc+zinclad+zrelig.import, data=wvs))
+```
+
+# Multilevel Model
+
+## Procedural steps
+
+First things first, I just need to merge the two datasets. I already brought in the country level data at the start of this markdown document, so I'll merge GDP and Gini into the WVS data here.
+
+```{r merging, echo=TRUE}
+wvs$ID <- seq.int(nrow(wvs))
+
+# Inserting inequality
+wvs$gini = 0
+for(i in 1:length(wvs$ID))
+{wvs$gini[i]=country$Gini[which(country$Code == wvs$country[i])]
+}
+# Inserting GDP
+wvs$gdpcap = 0
+for(i in 1:length(wvs$ID))
+{wvs$gdpcap[i]=country$GDPpercap[which(country$Code == wvs$country[i])]
+}
+
+# Converting the new country variables to z scores.
+wvs$zgini <- scale(wvs$gini, center=TRUE,scale=TRUE)
+wvs$zgdpcap <- scale(wvs$gdpcap, center=TRUE,scale=TRUE)
+```
+
+## Modeling
+
+First step in running an MLM is determining whether or not it's actually necessary. Here is the null model:
+
+```{r null model, echo=TRUE}
+summary(lme(zineq~1, data = wvs, random = ~ 1|S003A, method = "ML", na.action = "na.omit"))
+```
+
+Calculating the ICC based on the output of the null model:
+
+```{r ICC, echo=TRUE}
+ICC <- (.2843273*.2843273)/((.2843273*.2843273)+(.9598677*.9598677))
+ICC
+```
+
+While the effect of the clustering is small (8%), the data set is large so this is enough to bias the model output. So, moving forward with the MLM. First the predictor only model.
+
+```{r model1, echo=TRUE}
+summary(lme(zineq~zattrib, data = wvs, random = ~ 1|S003A, method = "ML", na.action = "na.omit"))
+```
+
+And now the full model with all Level 1 and LEvel 2 covariates.
+
+```{r model2, echo=TRUE}
+summary(lme(zineq~zattrib+zideol+zsex+zage+zeduc+zinclad+zrelig.import+zgini+zgdpcap, data = wvs, random = ~ 1|country, method = "ML", na.action = "na.omit"))
+```
+
+There is the final output - attributions for poverty are related to support for inequality, controlling for both individual and country level covariates.
+
+# Missing Data Logic Check
+
+In order to check if list wise deletion resulted in roughly similar outcomes to data with imputed values, I ran a multiple imputation using mice, just to compare the coefficients. First, here is the original model with non-standardized scores.
+
+```{r orig model, echo=TRUE}
+summary(lm(ineq~attrib+ideology+sex+age+educ+inc.lad+relig.import, data=wvs))
+```
+
+Now, I will run the imputation. This allows me to retain an extra (roughly) 15,000 rows by imputing upwards of 20,000 missing data points. The imputation creates five different imputed datasets. This allows us to make sure we aren't just getting one biased imputation; we do it five times and then pool across them.
+
+```{r imputation, echo=TRUE}
+imp <- mice(key_Vars)
+```
+
+
+Now lets re-run this regression with the newly imputed dataset.
+
+```{r imputed regress, echo=TRUE}
+fit <- with(imp, lm(ineq~attrib+ideology+sex+age+educ+inc.lad+relig.import))
+summary(fit)
+```
+
+
+```{r pooled, echo=TRUE}
+round(summary(pool(fit)), 2)
+```
+
+So above are each of the five regressions with imputed data, and then just one final regression with the pooled imputations. What we see is that when I impute the data using mice, the outcome is not much different than when I used listwise deletion. The key predictor, attributions for poverty, still has a beta of -.34 (as opposed to the -.37 we see with listiwse deletion).
+
+As such, I am comfortable using listwise deletion in this dataset as I then don't have to impute and analyze tens of thousands of observations that don't actually exist.
+
+
+
+
+
+
+
+
+
+
