@@ -1,0 +1,985 @@
+---
+title: "Dissertation Studies 2a/b - SPENT Experiments"
+author: "Dylan Wiwad"
+date: '2018-07-06'
+output: pdf_document
+---
+
+This is the supplemental code document for Studies 2a and 2b in my dissertation. This contains all the code and analysis regarding my handling of participant exclusions and missing data, pre-processing of the data (e.g., variable compositing, etc) and the analyses for both the original and replication SPENT studies.
+
+As per usual, load in any packages we might need, set the working directory, etc.
+
+```{r setup, include=TRUE, warning=FALSE, message=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("/users/dylanwiwad/dropbox/work/Dissertation/Writing/Dissertation/Data_and_Code/Studies_2a_2b/")
+
+library(rlist) # contains a function to append to lists
+library(BaylorEdPsych) # For the missing data analyses
+library(effsize) # For effect sizes
+library(pwr) # For power analyses
+library(psych) # For descriptives and reliabilities
+library(lavaan) # For mediation models
+```
+
+# The Data
+## Study 2a
+These data were collected in the Spring 2017 semester at Simon Fraser University. All data collection was done in-lab by a small team of RAs. All the variables that were collected were reported in the dissertation manuscript, and all the survey materials (both in word doc format and qualtrics .qsf format) can be found here on github/the OSF.
+
+### Exclusions
+There were no outright participant exclusions (further detail in the manuscript).
+
+There were two small naming errors in the participant ID column. Participant number 46 and 66 were skipped, and participant number 116 was used twice (presumably the second 116 should be 117, given that person started their survey approximately 30 minutes after 116). These two errors resulting in the last participant number being 166, despite there only being 164 actual participants. These were small RA data entry errors and have no bearing whatsoever on the results.
+
+## Study 2b
+
+These data were collected in the Fall and Spring 2017-18 semesters at Simon Fraser University. All data collection was done in-lab by a small team of RAs. All the variables that were collected were reported in the dissertation, and all the survey materials (both in word doc format and qualtrics .qsf format) can be found here on Github/the OSF. The survey was administered three times: Initially following the manipulation, one day later, and then at a variable time three follow up.
+
+### Exclusions
+Following Time 1 data collection, I ended up with a data set of 653 rows. These data, downloaded directly and untouched from Qualtrics, can be seen in the file study_2b_T1_raw_from_qualtrics.csv. In a similar vein to Study 2a, there were 38 duplicated rows with no data, as well as two rows that were tests. Removing these left a total sample of 613 participants.
+
+With respect to actual exclusions, there were two participants (19 and 241) who each simply stopped responding to the survey part way through (approximately 50% and 25% respectively). These participants were dropped from the data set.
+
+Thus, only two participants were outright excluded, leaving a final sample size of 611.
+
+# Missing Data
+## Study 2a
+
+```{r study 2a data, echo=TRUE}
+# Reading in the data file
+study2a <- read.csv("Study_2a.csv")
+```
+
+Below, you will see every single individual item from each of the variables of interest, followed by the number of missing data points for that item:
+
+```{r na count, echo=TRUE}
+sapply(study2a, function(x) sum(is.na(x)))
+```
+
+Given that no column contains any more than 1.8% missing data, I have opted to simply ignore these values when computing the composite scores. For instance, if a person skips one item on the support for inequality scale, they will get a mean score calculated out of four instead of five.
+
+A visual inspection of the data shows that no participant is missing more than one or two items on a given scale, thus missing data should generally not be a problem in this data set. 
+
+Lastly, I used Little's MCAR test to ensure the data were missing at random. As described in the manuscript, the MCAR test can only handle 50 variables. In order to bypass this and explore the nature of the missing data, I ran Little's MCAR 250 times. Specifically, I randomly chose a subset of 40 variables, ran Little's MCAR, and then saved the chi-square and p-values for each of the 250 iterations.
+
+Note that some of the iterations failed due to the randomly selected data being "computationally singular." This means there are cases of linear dependency in the columns that were chosen, thus the test cannot be run. As a result of this, I ran the analysis 250 times, expecting to lose a chunk to this error. I ended up with 199 successful tests. One additional note is that this analysis throws a warning messages "NAs introduced by coercion to integer range" - this is simply because the missing data in this dataset are empty cells, not NAs proper.
+
+If you are trying to replicate these analyses, beware this code is slow - these bootstrapped MCAR tests take about an hour to run (each). This isn't a function of the for loop, it's a function of running 10,000+ MCAR tests, when each test takes about 0.5 seconds.
+
+```{r MCAR study2a, echo=TRUE, warning=FALSE, message=FALSE}
+# Make two lists for the chi-squares and their corresponding p-values
+chis <- c()
+dfs <- c()
+ps <- c()
+
+# For loop that chooses 50 (max allowed) of the variables in the set, runs Little's MCAR,
+# and then appends the chi-square and p-value to the two lists. Run this analysis 100 times.
+# Then I can look at the average chi-square and p-value, as well as the proportion that reject 
+# the null hypothesis.
+
+# An extra 3,000 or so runs in service of times where the loop fails due to 
+# "computationally singular" sets of variables. Would like to end with an n of around 10,000 
+# chi squares and p values.
+x <- 1:13000
+
+for (i in x){
+  # Choose 40 random (based on the seed) variables, store those in a list called set
+  # I'm only choosing variables between columns 16 and 101 because those are the actual
+  # data
+  tryCatch({
+    # Set the seed for the randomization so the results are reproducible
+    set.seed(i)
+    set <- c(sample(16:101, 40))
+    # Make a small dataframe called key_vars, which contains the variables chosen in set
+    key_vars <- study2a[set]
+    # Run Litte's MCAR test on those 50 variables
+    mcar_test <- LittleMCAR(key_vars)
+    # Append the chi square and p-values to the lists we defined above
+    chis <- list.append(chis, mcar_test$chi.square)
+    dfs <- list.append(dfs, mcar_test$df)
+    ps <- list.append(ps, mcar_test$p.value)
+  }, error=function(e){})
+}
+
+describe(chis)
+describe(dfs)
+describe(ps)
+```
+
+Over the 10,464 bootstrapped analyses I saw an average chi-square of 566.11 on 531.55 degrees of freedom, p = .24.
+
+With 10,464 successful runs of Little's MCAR, here is a distribution of the chi-squares and p-values:
+
+```{r mcar ps, echo=TRUE}
+hist(chis, breaks=20)
+hist(ps, breaks=20)
+```
+
+There are 3,011 rejections of the null hypothesis (p < .05) that the data are MCAR - this is 28% of the total tests. This is way more than what I would expect with alpha set to .05 (this suggests in a large enough sample, the distribution of p values should be flat; only 5% should reject the null). However, given the average statistic, I retained the null hypothesis that the data in Study 2a are missing completely at random. As described in the manuscript, there are very few missing values and thus I am comfortable retaining this hypothesis and simply averaging over and listwise deleting rows with missing values on relevant variables.
+
+## Study 2b 
+
+```{r study 2b data, echo=TRUE, warning=FALSE}
+# Reading in the data file
+study2b <- read.csv("Study_2b.csv")
+```
+
+Below, you will see every single individual item from each of the variables of interest, followed by the number of missing data points for that item:
+
+```{r na count 2b, echo=TRUE}
+sapply(study2b, function(x) sum(is.na(x)))
+```
+
+Similar to Study 2a, 74% of the relevant variables demonstrated no missingness. Of the ones that did, the highest was income with 6.8% missing. The highest of the individual items that were part of composite variables was only 1.8%. Again, given these percentages were so low, I just averaged over them.
+
+Following the same procedure as Study 2a, I assessed for the data being MCAR. Again, using a series of Little's MCAR tests.
+
+```{r MCAR study2b, echo=TRUE,warning=FALSE, message=FALSE}
+chis2b <- c()
+dfs2b <- c()
+ps2b <- c()
+
+x <- 1:13000
+
+for (i in x){
+  tryCatch({
+    set.seed(i)
+    set <- c(sample(17:132, 40))
+    key_vars <- study2b[set]
+    mcar_test <- LittleMCAR(key_vars)
+    chis2b <- list.append(chis2b, mcar_test$chi.square)
+    dfs2b <- list.append(dfs2b, mcar_test$df)
+    ps2b <- list.append(ps2b, mcar_test$p.value)
+  }, error=function(e){})
+}
+
+describe(chis2b)
+describe(dfs2b)
+describe(ps2b)
+```
+
+Across the 11,019 bootstrapped samples I saw an average chi-square of 239.88 on 210.82 degrees of freedom, p = .28.
+
+With 11,019 successful runs of Little's MCAR, here is a distribution of the chi squares and p-values:
+
+```{r mcar ps2b, echo=TRUE}
+hist(chis2b, breaks=20)
+hist(ps2b, breaks=20)
+```
+
+There are 4,065 rejections of the hypothesis that the data are MCAR (37%), again much higher than I would expect given alpha = .05. However, given the retainment of the null hypothesis in the average statistics, I retained the null hypothesis that the data in Study 2b are missing completely at random for the same reasons as described in Study 2a.
+
+# Data Pre-Processing
+## Study 2a
+
+Here I do all of the reverse scoring and mean computation for Study 2a. Specifically, this is for both attributions for poverty scales, support for economic inequality, support for redistribution, and empathy. One thing to note, this study was conducted before the final scale development for the SEIS was complete. Thus, there are nine items in total on this scale. However, I will only composite and analyze the five items that ended up making it in to the final scale (See Wiwad et al., Under Review).
+
+```{r study 2a pre-proc, echo=TRUE, warning=FALSE}
+# lists of columns to recode where its a 7 point scale, and then a 5 point scale
+cols_7pt <- c(30,38,45,49,29,32,34,35,41,44,47,51,59,60,62)
+cols_5pt <- c(74,81,84,73,82,80,85)
+
+study2a[cols_7pt] <- apply(study2a[cols_7pt], MARGIN = 2, function(x) x <- 8 - x)
+study2a[cols_5pt] <- apply(study2a[cols_5pt], MARGIN = 2, function(x) x <- 6 - x)
+
+# Guimond, Begin, and Palmer measure
+col.gbpdisp <- c(16,17,18,19)
+col.gbpsit <- c(20,21,22,23,24,25,26,27)
+study2a$gbpdisp <- rowMeans(study2a[,col.gbpdisp], na.rm = TRUE)
+study2a$gbpsit <- rowMeans(study2a[,col.gbpsit], na.rm = TRUE)
+
+# Attributions scale from Nickols & Nielsen, 2011
+# Individual causes are items: 2, 3, 9, 10, 11, 14, 17, 18, 20, 21, 22, 24, 25, 26, 28, 29, 30
+# Reverse code 2, 10, 17, 21
+# High means you put a lot of individual blame
+# Structural causes are items: 1, 4, 5, 6, 7, 8, 13, 15, 16, 19, 23
+# Reverse code 1, 4, 6, 7, 13, 16, 19, 23
+# High means you put a lot of system blame
+# Factual demographic questions are items: 12, 27
+col.nndisp <- c(30,31,37,38,39,42,45,46,48,49,50,52,53,54,56,57,58)
+col.nnsit <- c(29,32,33,34,35,36,41,43,44,47,51)
+study2a$nndisp <- rowMeans(study2a[,col.nndisp], na.rm = TRUE)
+study2a$nnsit <- rowMeans(study2a[,col.nnsit], na.rm = TRUE)
+
+# Support for economic inequality scale
+# Higher score means more support for inequality
+col.seis <- c(59,60,62,63,64)
+study2a$seis <- rowMeans(study2a[,col.seis], na.rm = TRUE)
+
+# Support for redistribution, higher means more support for redistribution
+col.redist <- c(68,69,70,71)
+study2a$redist <- rowMeans(study2a[,col.redist], na.rm = TRUE)
+
+# Empathy
+# Empathic Concern: 1, 3, 6, 10, 13, 15, 17
+col.EC <- c(72, 74, 77, 81, 84, 86, 88)
+study2a$EC <- rowMeans(study2a[,col.EC], na.rm = TRUE)
+# Perspective Taking: 2, 5, 8, 11, 16, 19, 21
+col.PT <- c(73, 76, 79, 82, 87, 90, 92)
+study2a$PT <- rowMeans(study2a[,col.PT], na.rm = TRUE)
+# Personal Distress: 4, 7, 9, 12, 14, 18, 20
+col.PD <- c(75, 78, 80, 83, 85, 89, 91)
+study2a$PD <- rowMeans(study2a[,col.PD], na.rm = TRUE)
+# Total Empathy
+col.emp <- c(72, 74, 77, 81, 84, 86, 88,73, 76, 79, 82, 87, 90, 92,75, 78, 80, 83, 85, 89, 91)
+study2a$emp.tot <- rowMeans(study2a[,col.emp], na.rm=TRUE)
+
+psych::alpha(study2a[col.gbpdisp])
+psych::alpha(study2a[col.gbpsit])
+psych::alpha(study2a[col.nndisp])
+psych::alpha(study2a[col.nnsit])
+psych::alpha(study2a[col.seis])
+psych::alpha(study2a[col.redist])
+psych::alpha(study2a[col.EC])
+psych::alpha(study2a[col.PT])
+psych::alpha(study2a[col.PD])
+psych::alpha(study2a[col.emp])
+```
+
+## Study 2b
+
+Repeat the above, with Study 2b data
+
+```{r study 2b pre-proc, echo=TRUE, warning=FALSE}
+# lists of columns to recode where its a 7 point scale, and then a 5 point scale
+cols_7pt <- c(18,26,33,37,17,20,22,23,29,32,35,39,47,48,49)
+study2b[cols_7pt] <- apply(study2b[cols_7pt], MARGIN = 2, function(x) x <- 8 - x)
+
+# Attributions for poverty, same structure as above - the nn measure only.
+col.ind.att <- c(18,19,25,26,27,30,33,34,36,37,38,40,41,42,44,45,46)
+col.sys.att <- c(17,20,21,22,23,24,29,31,32,35,39)
+study2b$disp <- rowMeans(study2b[,col.ind.att], na.rm = TRUE)
+study2b$sit <- rowMeans(study2b[,col.sys.att], na.rm = TRUE)
+
+# Support for economic inequality
+col.seis <- c(47,48,49,50,51)
+study2b$seis <- rowMeans(study2b[,col.seis], na.rm = TRUE)
+
+# attributions for obesity (columns 52-66)
+col.obese.int <- c(53,55,56,57,58,59,61,62)
+col.obese.sit <- c(52,54,60,66)
+col.obese.phy <- c(63,64,65)
+study2b$obese.int <- rowMeans(study2b[,col.obese.int], na.rm = TRUE)
+study2b$obese.sit <- rowMeans(study2b[,col.obese.sit], na.rm = TRUE)
+study2b$obese.phy <- rowMeans(study2b[,col.obese.phy], na.rm = TRUE)
+
+# attributions for wealth (columns 68-71)
+col.wealth.int <- c(68,69)
+col.wealth.sit <- c(70,71)
+study2b$wealth.int <- rowMeans(study2b[,col.wealth.int], na.rm = TRUE)
+study2b$wealth.sit <- rowMeans(study2b[,col.wealth.sit], na.rm = TRUE)
+
+# attributions for financial situation broadly (columns 72-86)
+col.finsit.int <- c(72,73,74,82,86)
+col.finsit.sit <- c(75,76,79,80,81)
+col.finsit.fam <- c(77,78,83)
+col.finsit.luck <- c(84,85)
+study2b$finsit.int <- rowMeans(study2b[,col.finsit.int], na.rm = TRUE)
+study2b$finsit.sit <- rowMeans(study2b[,col.finsit.sit], na.rm = TRUE)
+study2b$finsit.fam <- rowMeans(study2b[,col.finsit.fam], na.rm = TRUE)
+study2b$finsit.luck <- rowMeans(study2b[,col.finsit.luck], na.rm = TRUE)
+
+# attributions for crime (columns 87-98)
+# The Effect of Personal Theories about the Causes of
+# Crime on Discretionary Responses to Criminals (Perkowitz, 1984)
+col.crime.sit <- c(87,88,89,90)
+col.crime.econ <- c(91,92,93,94)
+col.crime.ind <- c(95,96,97,98)
+study2b$crime.sit <- rowMeans(study2b[,col.crime.sit], na.rm = TRUE)
+study2b$crime.econ <- rowMeans(study2b[,col.crime.econ], na.rm = TRUE)
+study2b$crime.ind <- rowMeans(study2b[,col.crime.ind], na.rm = TRUE)
+
+# perceived causes of inequality (columns 99-110)
+# Kraus, Piff, and Keltner (2009)
+col.ineq.sit <- c(99,100,101,102,103,104,105)
+col.ineq.ind <- c(106,107,108,109,110)
+study2b$ineq.sit <- rowMeans(study2b[,col.ineq.sit], na.rm = TRUE)
+study2b$ineq.ind <- rowMeans(study2b[,col.ineq.ind], na.rm = TRUE)
+
+# causal attributions (columns 111-116)
+col.causalatts <- c(111,112,113,114,115,116)
+study2b$causalatts <- rowMeans(study2b[,col.causalatts], na.rm = TRUE)
+
+# support for redistribution (columns 117-120)
+col.redist <- c(117,118,119,120)
+col.govcan <- c(119,120)
+col.govshould <- c(117,118)
+study2b$redist <- rowMeans(study2b[,col.redist], na.rm = TRUE)
+study2b$govcan <- rowMeans(study2b[,col.govcan], na.rm = TRUE)
+study2b$govshould <- rowMeans(study2b[,col.govshould], na.rm = TRUE)
+
+# meritocracy (columns 121-126)
+col.merit <- c(121,122,123,124,125,126)
+study2b$merit <- rowMeans(study2b[,col.merit], na.rm = TRUE)
+
+psych::alpha(study2b[col.ind.att])
+psych::alpha(study2b[col.sys.att])
+psych::alpha(study2b[col.seis])
+psych::alpha(study2b[col.obese.int])
+psych::alpha(study2b[col.obese.sit])
+psych::alpha(study2b[col.obese.phy])
+psych::alpha(study2b[col.wealth.int])
+psych::alpha(study2b[col.wealth.sit])
+psych::alpha(study2b[col.finsit.fam])
+psych::alpha(study2b[col.finsit.int])
+psych::alpha(study2b[col.finsit.luck])
+psych::alpha(study2b[col.finsit.sit])
+psych::alpha(study2b[col.crime.econ])
+psych::alpha(study2b[col.crime.ind])
+psych::alpha(study2b[col.crime.sit])
+psych::alpha(study2b[col.ineq.ind])
+psych::alpha(study2b[col.ineq.sit])
+psych::alpha(study2b[col.causalatts])
+psych::alpha(study2b[col.redist])
+psych::alpha(study2b[col.merit])
+```
+
+# Analyses
+## Study 2a
+
+Here are all the initial t-test for Study 2a. Testing the difference between conditions on both measures of attributions for poverty, support for economic inequality, support for redistribution, and empathy.
+
+NOTE: For condition:
+
+1 = Monopoly
+
+2 = SPENT
+
+```{r basic ttests, echo=TRUE}
+# Run 10 t-tests. one for each of the variables composited above
+sapply(study2a[102:111], function(x) t.test(x ~ study2a$condition, var.equal=TRUE))
+```
+
+Here are the effect sizes for those t-tests:
+
+```{r eff sizes, echo=TRUE, warning=FALSE, message=FALSE}
+lapply(study2a[102:111], function(x) effsize::cohen.d(x~study2a$condition))
+```
+
+Post-hoc power analyses for the above observed effects:
+
+NOTE: just took them all as positive.
+
+```{r power2, echo=TRUE}
+# Observed effect sizes from the previous analysis into a list
+eff_sizes <- c(0.3071855, 0.2994647, 0.4192696, 0.7750065, 0.4765864, 0.1537139, 0.08250848,
+               0.0311547, 0.0993751, 0.0839929)
+
+# Run a post-hoc power test on each of those effect sizes
+for (i in eff_sizes){
+  power <- pwr.t.test(n=82, d=i, type="two.sample")
+  print(power)}
+```
+
+### Test of Mediation
+
+Exploring whether or not attributions for poverty mediate the relationship between perspective taking and support for economic inequality.
+
+```{r 2a mediation, echo=TRUE}
+# Making z-scores for the mediation model
+cols = c('seis', 'condition', 'nndisp', 'nnsit')
+study2a[cols] <- sapply(study2a[cols], function(x) scale(x, scale=TRUE, center=TRUE))
+
+model <- ' # direct effect
+             seis ~ c*condition
+# mediators
+nndisp ~ a1*condition
+nnsit ~ a2*condition
+seis ~ b1*nndisp
+seis ~ b2*nnsit
+# indirect effects (a1*b and a2*b)
+a1b1 := a1*b1
+a2b2 := a2*b2
+# total effect
+total := c + (a1*b1) + (a2*b2)
+'
+
+fit <- sem(model, data = study2a)
+summary(fit, fit.measures = TRUE)
+```
+
+As seen in a footnote in the manuscript, testing the mediation with the other measure of attributions for poverty, just to make sure the overall results don't change:
+
+```{r 2a mediation2, echo=TRUE}
+# Making z-scores for the mediation model
+cols = c('gbpdisp', 'gbpsit')
+study2a[cols] <- sapply(study2a[cols], function(x) scale(x, scale=TRUE, center=TRUE))
+
+model2 <- ' # direct effect
+             seis ~ c*condition
+# mediators
+gbpdisp ~ a1*condition
+gbpsit ~ a2*condition
+seis ~ b1*gbpdisp
+seis ~ b2*gbpsit
+# indirect effects (a1*b and a2*b)
+a1b1 := a1*b1
+a2b2 := a2*b2
+# total effect
+total := c + (a1*b1) + (a2*b2)
+'
+
+fit <- sem(model2, data = study2a)
+summary(fit, fit.measures = TRUE)
+```
+
+## Study 2b
+
+First, I will put here a quick demonstration of the a priori power analysis for Study 2b. The original power analysis was conducted using g*power. In Study 2a, I decided that the smallest effect size of interest to be a Cohen's d of 0.20 - roughly corresponding to a "small" effect. So:
+
+```{r a priori power, echo=TRUE}
+pwr.t.test(power=0.80, sig.level=0.05, d=0.20, type="two.sample", alternative='greater')
+```
+
+Therefore, to detect an effect as small as .20, with adequate power, I needed a total sample of 620 participants.
+
+Here are the first four hypothesis from the preregistration:
+
+1.1 Participants who play SPENT (www.playspent.org) will display higher situational attributions for poverty than students who simply fill out the survey (no game control condition).
+
+1.2. Participants who play SPENT (www.playspent.org) will display lower dispositional attributions for poverty than students who simply fill out the survey (no game control condition).
+
+1.3 Participants who play SPENT (www.playspent.org) will display lower support for inequality than students who simply fill out the survey (no game control condition).  
+
+1.4 Participants who play SPENT (www.playspent.org) will display higher support for redistribution than students who simply fill out the survey (no game control condition).  
+
+NOTE: For condition:
+
+1 = SPENT
+
+2 = No-game Control
+
+```{r confirm test, echo = TRUE}
+# Two different lines because these are two-tailed in different directions
+lapply(study2b[c(138,155)], function(x) t.test(x~study2b$cond, alternative='g', var.equal=TRUE)) # hyps 1.1 and 1.4
+lapply(study2b[c(137,139)], function(x) t.test(x~study2b$cond, alternative='l', var.equal=TRUE)) # hyps 1.2 and 1.3
+```
+
+Effect sizes:
+
+```{r effects, echo = TRUE, warning=FALSE, message=FALSE}
+lapply(study2b[c(137,138,139,155)], function(x) effsize::cohen.d(x~study2b$cond))
+```
+
+Post-hoc power analyses:
+
+NOTE: I just took them all as positive values, used the alternative "greater" due to the fact that they
+re one tailed tests.
+
+```{r power, echo=TRUE}
+# Observed effect sizes from the previous analysis into a list
+eff_sizes <- c(0.1042889, 0.4987509, 0.1986627, 0.1749043)
+
+# Run a post-hoc power test on each of those effect sizes
+for (i in eff_sizes){
+  power <- pwr.t.test(n=611, d=i, type="two.sample", alternative='greater')
+  print(power)}
+```
+
+## Plots of hypotheses 1.1-1.4
+
+```{r sit plot, warning=FALSE, echo=TRUE, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+library(ggplot2)
+s <- ggplot(data=study2b, aes(x=cond, y=sit)) + geom_bar(stat='summary', fun.y='mean', color='black', fill='skyblue', size=1) + labs(y='Situational Attributions for Poverty', x = 'Condition') + ggtitle('Situational Attributions by Condition') + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black", size=1), plot.title = element_text(hjust = 0.5)) + scale_x_discrete(limits=c(1,2), labels = c('SPENT', 'No-game Control')) + coord_cartesian(ylim=c(4,5)) + theme(text = element_text(size=15)) + theme(axis.text.x=element_text(colour="black"))+ annotate("text", label="Cohen's d = .50", x=2.5,y=4.90) + annotate("text", label="power = 1.0", x=2.5,y=4.85)+ annotate("text", label="p < .001", x=2.5,y=4.8)
+
+s
+
+```
+
+```{r ind plot, warning=FALSE, echo=TRUE, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+i <- ggplot(data=study2b, aes(x=cond, y=disp)) + geom_bar(stat='summary', fun.y='mean', color='black', fill='lightcoral', size=1) + labs(y='Individual Attributions for Poverty', x = 'Condition') + ggtitle('Individual Attributions by Condition') + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black", size=1), plot.title = element_text(hjust = 0.5)) + scale_x_discrete(limits=c(1,2), labels = c('SPENT', 'No-game Control')) + coord_cartesian(ylim=c(3,4)) + theme(text = element_text(size=15)) + theme(axis.text.x=element_text(colour="black"))+ annotate("text", label="Cohen's d = .10", x=2.5,y=3.90) + annotate("text", label="power = .57", x=2.5,y=3.85)+ annotate("text", label="p = .10", x=2.5,y=3.8)
+
+i
+```
+
+```{r tol plot, warning=FALSE, echo=TRUE, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+t <- ggplot(data=study2b, aes(x=cond, y=seis)) + geom_bar(stat='summary', fun.y='mean', color='black', fill='seagreen', size=1) + labs(y='SEIS', x = 'Condition') + ggtitle('Support for Economic Inequality by Condition') + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black", size=1), plot.title = element_text(hjust = 0.5)) + scale_x_discrete(limits=c(1,2), labels = c('SPENT', 'No-game Control')) + coord_cartesian(ylim=c(2,3)) + theme(text = element_text(size=15)) + theme(axis.text.x=element_text(colour="black")) + annotate("text", label="Cohen's d = .20", x=2.5,y=2.95) + annotate("text", label="power = .97", x=2.5,y=2.9)+ annotate("text", label="p = .007", x=2.5,y=2.85)
+
+t
+```
+
+```{r redist plot, warning=FALSE, echo=TRUE, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+i <- ggplot(data=study2b, aes(x=cond, y=redist)) + geom_bar(stat='summary', fun.y='mean', color='black', fill='violet', size=1) + labs(y='Support for Redistribution', x = 'Condition') + ggtitle('Support for Redistribution by Condition') + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black", size=1), plot.title = element_text(hjust = 0.5)) + scale_x_discrete(limits=c(1,2), labels = c('SPENT', 'No-game Control')) + coord_cartesian(ylim=c(3,4)) + theme(text = element_text(size=15)) + theme(axis.text.x=element_text(colour="black")) + annotate("text", label="Cohen's d = .17", x=2.5,y=3.90) + annotate("text", label="power = .92", x=2.5,y=3.85)+ annotate("text", label="p = .02", x=2.5,y=3.8)
+
+i
+```
+
+### Test of Mediation
+
+Exploring whether or not situational attributions for poverty mediate the relationship between perspective taking and support for economic inequality.
+
+```{r 2b mediation, echo=TRUE}
+# Making z-scores for the mediation model
+cols = c('seis', 'cond', 'sit')
+med_data <- data.frame(seis=study2b$seis,
+                       cond=study2b$cond,
+                       sit=study2b$sit)
+
+med_data[cols] <- sapply(med_data[cols], function(x) scale(x, scale=TRUE, center=TRUE))
+
+model2 <- ' # direct effect
+             seis ~ c*cond
+# mediators
+sit ~ a1*cond
+seis ~ b1*sit
+# indirect effects (a1*b and a2*b)
+a1b1 := a1*b1
+# total effect
+total := c + (a1*b1)
+'
+
+fit <- sem(model2, data = med_data)
+summary(fit, fit.measures = TRUE)
+```
+
+# Exploratory Analyses
+## Exploring the Time 2 data
+
+We had participants fill out the survey again approximately 24 hours later, in order to see if the effects of spent persisted for at least one day. We did not pre-register any of these hypotheses because we do not have specific predictions - we simply want to know if the effect persists or not.
+
+To merge the data file I'm going to do a left join, that way I keep everything in the first datafile, then add in everything in the second
+
+```{r t2 data, echo = TRUE, warning=FALSE, message=FALSE}
+t2_data <- read.csv('Study_2b_T2.csv', stringsAsFactors = FALSE)
+
+cols_7pt <- c(18,26,33,37,17,20,22,23,29,32,35,39,47,48,49)
+t2_data[cols_7pt] <- apply(t2_data[cols_7pt], MARGIN = 2, function(x) x <- 8 - x)
+
+col.ind.att <- c(18,19,25,26,27,30,33,34,36,37,38,40,41,42,44,45,46)
+col.sys.att <- c(17,20,21,22,23,24,29,31,32,35,39)
+t2_data$disp <- rowMeans(t2_data[,col.ind.att], na.rm = TRUE)
+t2_data$sit <- rowMeans(t2_data[,col.sys.att], na.rm = TRUE)
+
+# tolerance for inequality (columns 47-51)
+col.toltotal <- c(47,48,49,50,51)
+t2_data$seis <- rowMeans(t2_data[,col.toltotal], na.rm = TRUE)
+
+# attributions for obesity (columns 52-66)
+col.obese.int <- c(53,55,56,57,58,59,61,62)
+col.obese.sit <- c(52,54,60,66)
+col.obese.phy <- c(63,64,65)
+
+t2_data$obese.int <- rowMeans(t2_data[,col.obese.int], na.rm = TRUE)
+t2_data$obese.sit <- rowMeans(t2_data[,col.obese.sit], na.rm = TRUE)
+t2_data$obese.phy <- rowMeans(t2_data[,col.obese.phy], na.rm = TRUE)
+
+# attributions for wealth (columns 68-71)
+col.wealth.int <- c(68,69)
+col.wealth.sit <- c(70,71)
+
+t2_data$wealth.int <- rowMeans(t2_data[,col.wealth.int], na.rm = TRUE)
+t2_data$wealth.sit <- rowMeans(t2_data[,col.wealth.sit], na.rm = TRUE)
+
+# attributions for financial situation broadly (columns 72-86)
+col.finsit.int <- c(72,73,74,82,86)
+col.finsit.sit <- c(75,76,79,80,81)
+col.finsit.fam <- c(77,78,83)
+col.finsit.luck <- c(84,85)
+
+t2_data$finsit.int <- rowMeans(t2_data[,col.finsit.int], na.rm = TRUE)
+t2_data$finsit.sit <- rowMeans(t2_data[,col.finsit.sit], na.rm = TRUE)
+t2_data$finsit.fam <- rowMeans(t2_data[,col.finsit.fam], na.rm = TRUE)
+t2_data$finsit.luck <- rowMeans(t2_data[,col.finsit.luck], na.rm = TRUE)
+
+# attributions for crime (columns 87-98)
+# The Effect of Personal Theories about the Causes of
+# Crime on Discretionary Responses to Criminals (Perkowitz, 1984)
+col.crime.sit <- c(87,88,89,90)
+col.crime.econ <- c(91,92,93,94)
+col.crime.ind <- c(95,96,97,98)
+
+t2_data$crime.sit <- rowMeans(t2_data[,col.crime.sit], na.rm = TRUE)
+t2_data$crime.econ <- rowMeans(t2_data[,col.crime.econ], na.rm = TRUE)
+t2_data$crime.ind <- rowMeans(t2_data[,col.crime.ind], na.rm = TRUE)
+
+# perceived causes of inequality (columns 99-110)
+# Kraus, Piff, and Keltner (2009)
+col.ineq.sit <- c(99,100,101,102,103,104,105)
+col.ineq.ind <- c(106,107,108,109,110)
+
+t2_data$ineq.sit <- rowMeans(t2_data[,col.ineq.sit], na.rm = TRUE)
+t2_data$ineq.ind <- rowMeans(t2_data[,col.ineq.ind], na.rm = TRUE)
+
+# causal attributions (columns 111-116)
+col.causalatts <- c(111,112,113,114,115,116)
+
+t2_data$causalatts <- rowMeans(t2_data[,col.causalatts], na.rm = TRUE)
+
+# support for redistribution (columns 117-120)
+col.redist <- c(117,118,119,120)
+col.govcan <- c(119,120)
+col.govshould <- c(117,118)
+
+t2_data$redist <- rowMeans(t2_data[,col.redist], na.rm = TRUE)
+t2_data$govcan <- rowMeans(t2_data[,col.govcan], na.rm = TRUE)
+t2_data$govshould <- rowMeans(t2_data[,col.govshould], na.rm = TRUE)
+
+# meritocracy (columns 121-126)
+col.merit <- c(121,122,123,124,125,126)
+
+t2_data$merit <- rowMeans(t2_data[,col.merit], na.rm = TRUE)
+```
+
+Now that I've got the time 2 data in and re-coded exactly like the first, its time to do a merge based on the individual ID numbers we assigned to each participants. Also, not bad - we had 600 of the original 611 sign on to the t2 survey. About 30 of those didn't actually fill out the DVs, but it leaves us with an attrition rate of only about 9.5%.
+
+```{r joining data, echo = TRUE}
+merged <- merge(study2b, t2_data, by="pcode", all.x=TRUE)
+```
+
+Alright, so when I merge the data by pcode, we get a final dataset of 643 observations of 303 variables. This seems right in terms of the number of columns. There were 152 columns in each dataset but we drop one of the pcode colums, so that comes out to 303. There are 22 extra rows though. Not sure yet what thats all about. First thing I'm going to do here is just replicate the t-tests with only the time two data. Does everything hold? Using two tailed tests now, given that these are exploratory tests.
+
+```{r confirm test time 2, echo = TRUE}
+t.test(merged$sit.y~merged$cond, var.equal=TRUE) # hyp 1.1
+t.test(merged$disp.y~merged$cond, var.equal=TRUE) # hyp 1.2
+t.test(merged$seis.y~merged$cond, var.equal=TRUE) # hyp 1.3
+t.test(merged$redist.y~merged$cond, var.equal=TRUE) # hyp 1.4
+```
+
+So, all the main effects hold. There's an interesting pattern in the means, but I'll get into it more when I graph it, for now I'll just say the main effect of the manipulation (increase in situational attributions) holds but the effect size drops a bit, which is exactly what we'd expect. Here are the effect sizes and corresponding power analyses:
+
+## Situational Attributions:
+
+```{r effects 2, echo = TRUE}
+effsize::cohen.d(merged$sit.y~merged$cond) # hyp 1.1
+pwr.t.test(d= 0.3155682, n=600, sig.level=.05, type='two')
+```
+
+## Individual Attributions:
+
+```{r ind 2, echo=TRUE}
+effsize::cohen.d(merged$disp.y~merged$cond) # hyp 1.2
+pwr.t.test(d= 0.1183513, n=600, sig.level=.05, type='two')
+```
+
+
+## Support for Economic Inequality:
+
+```{r SEIS 2, echo=TRUE}
+effsize::cohen.d(merged$seis.y~merged$cond) # hyp 1.3
+pwr.t.test(d= 0.2208389, n=600, sig.level=.05, type='two')
+```
+
+## Support for Redistribution:
+
+```{r redist 2, echo=TRUE}
+effsize::cohen.d(merged$redist.y~merged$cond) # hyp 1.3
+pwr.t.test(d= 0.1848341, n=600, sig.level=.05, type='two')
+```
+
+So, just as we would expect the effect size on situational attributions for poverty drops from .49 to .31; the impact of the manipulation persists a day but the effects are obviously weaker. Also, just as we would expect the mean in the control condition stays the same but the mean in the spent condition drops a bit, closing the gap between the two.
+
+Now, its the rest of the effects that are somewhat confusing. As I mentioned above, all the effects persist into the second day, which is nice. But it doesn't seem like the control condition is staying the same and the experimental condition is moving up or down to close the gap. Whats actually happening is the effects are staying more or less the same, and BOTH means are shifting up or down.
+
+One possible reason for this is a decrease in perceived social pressure for certain desirable responses. This could be the case because the participants completed the t1 survey in the lab, and completed the t2 survey at home. We knew this was going to be an issue before running the study, but there was no way of getting around it without a significant increase in demands on RA time and complexity of the research design. It also wasn't really possible to require RPS participants to come back the next day.
+
+Let's plot them all together. The data need to be restructured a bit so they are stacked in order for these plots to work, so I'm going to re-merge them into long format, instead of wide.
+
+```{r remerge, echo = TRUE}
+# Need to bring condition variable into the time 2
+t2_data$cond <- NA
+t2_data$cond <- study2b$cond[match(t2_data$pcode, study2b$pcode)]
+
+# Now merge long, first remove the two placeholder columns I needed earlier to keep the column numbers consistent with t1
+t2_data$placeholder1 <- t2_data$placeholder1.1 <- NULL
+
+# Merge
+t2_data$pid <- 0
+merged_long <- rbind(study2b, t2_data)
+```
+
+```{r sit plot 2, warning=FALSE, echo=TRUE, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+library(ggplot2)
+s <- ggplot(data=merged_long, aes(x=cond, y=sit, color=as.factor(time))) + geom_line(stat="summary", fun.y='mean', size = 1.5) + labs(y='Situational Attributions for Poverty', x = 'Condition') + ggtitle('Situational Attributions by Condition and Time') + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black", size=1), plot.title = element_text(hjust = 0.5)) + scale_x_discrete(limits=c(1,2), labels = c('SPENT', 'No-game Control')) + coord_cartesian(ylim=c(4,5)) + theme(text = element_text(size=15)) + guides(color=guide_legend(title='Time')) + scale_color_brewer(palette='Dark2')
+s 
+```
+
+
+```{r ind plot 2, warning=FALSE, echo=TRUE, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+i <- ggplot(data=merged_long, aes(x=cond, y=disp, color=as.factor(time))) + geom_line(stat="summary", fun.y='mean', position=position_dodge(), size = 1.5) + labs(y='Dispositional Attributions for Poverty', x = 'Condition') + ggtitle('Dispositional Attributions by Condition and Time') + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black", size=1), plot.title = element_text(hjust = 0.5)) + scale_x_discrete(limits=c(1,2), labels = c('SPENT', 'No-game Control')) + coord_cartesian(ylim=c(3,4)) + theme(text = element_text(size=15)) + guides(color=guide_legend(title='Time')) + scale_color_brewer(palette = 'Dark2')
+
+i 
+```
+
+```{r seis plot 2, warning=FALSE, echo=TRUE, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+i <- ggplot(data=merged_long, aes(x=cond, y=seis, color=as.factor(time))) + geom_line(stat="summary", fun.y='mean', position=position_dodge(), size = 1.5) + labs(y='Support for Economic Inequality', x = 'Condition') + ggtitle('SEIS by Condition and Time') + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black", size=1), plot.title = element_text(hjust = 0.5)) + scale_x_discrete(limits=c(1,2), labels = c('SPENT', 'No-game Control')) + coord_cartesian(ylim=c(2.0,4.0)) + theme(text = element_text(size=15)) + guides(color=guide_legend(title='Time')) + scale_color_brewer(palette='Dark2')
+i 
+```
+
+```{r redist plot 2, warning=FALSE, echo=TRUE, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+i <- ggplot(data=merged_long, aes(x=cond, y=redist, color=as.factor(time))) + geom_line(stat="summary", fun.y='mean', position=position_dodge(), size = 1.5) + labs(y='Support for Redistribution', x = 'Condition') + ggtitle('Support for Redistribution by Condition and Time') + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black", size=1), plot.title = element_text(hjust = 0.5)) + scale_x_discrete(limits=c(1,2), labels = c('SPENT', 'No-game Control')) + coord_cartesian(ylim=c(2.5,4)) + theme(text = element_text(size=15)) + guides(color=guide_legend(title='Time')) + scale_color_brewer(palette='Dark2')
+i 
+```
+
+# Broader Causal Attributions
+
+Just in a quick set of exploratory tests I'll look just at Time 1, how SPENT influenced broader causal attributions
+
+1 = SPENT
+2 = control
+
+```{r broad atts, echo=TRUE}
+t.test(obese.phy~cond, data=study2b, var.equal=TRUE)
+t.test(obese.sit~cond, data=study2b, var.equal=TRUE)
+t.test(obese.int~cond, data=study2b, var.equal=TRUE)
+
+t.test(crime.ind~cond, data=study2b, var.equal=TRUE)
+t.test(crime.econ~cond, data=study2b, var.equal=TRUE) # difference here
+t.test(crime.sit~cond, data=study2b, var.equal=TRUE)
+
+t.test(finsit.luck~cond, data=study2b, var.equal=TRUE)
+t.test(finsit.fam~cond, data=study2b, var.equal=TRUE)
+t.test(finsit.int~cond, data=study2b, var.equal=TRUE)
+t.test(finsit.sit~cond, data=study2b, var.equal=TRUE)
+
+t.test(wealth.sit~cond, data=study2b, var.equal=TRUE)
+t.test(wealth.int~cond, data=study2b, var.equal=TRUE) # difference here
+
+t.test(ineq.ind~cond, data=study2b, var.equal=TRUE)
+t.test(ineq.sit~cond, data=study2b, var.equal=TRUE)
+
+t.test(causalatts~cond, data=study2b, var.equal=TRUE)
+```
+
+NOTE: Most of these scales had extremely poor reliability. I hesitate to really interpret these null findings.
+
+So, from all these tests it seems as though SPENT does not change any broader causal attributions for obesity, financial situation, or just causal style broadly. It does show a difference, however, by decreasing internal attributions for wealth. This is somewhat inconsistent with the poverty stuff - if anything we'd expect it to change situational attributions for wealth? Interesting. There was also an increase in the belief that economic circumstances are a cause of crime. Going to just run all the same tests in the time 2 data.
+
+```{r broad atts 2, echo=TRUE}
+t.test(obese.phy~cond, data=t2_data)
+t.test(obese.sit~cond, data=t2_data)
+t.test(obese.int~cond, data=t2_data)
+
+t.test(crime.ind~cond, data=t2_data)
+t.test(crime.econ~cond, data=t2_data)
+t.test(crime.sit~cond, data=t2_data) # p = .06
+
+t.test(finsit.luck~cond, data=t2_data) 
+t.test(finsit.fam~cond, data=t2_data) # difference here
+t.test(finsit.int~cond, data=t2_data)
+t.test(finsit.sit~cond, data=t2_data)
+
+t.test(wealth.sit~cond, data=t2_data)
+t.test(wealth.int~cond, data=t2_data) # difference here -> got stronger at time 2
+
+t.test(ineq.ind~cond, data=t2_data)
+t.test(ineq.sit~cond, data=t2_data)
+
+t.test(causalatts~cond, data=t2_data)
+```
+
+The interesting bit here is that it seems like the difference between conditions on individual attributions for wealth got stronger on the second day. But the movement is again in a weird place; the control group mean was slightly higher on day two relative to day 1.
+
+# Long term follow up
+
+Following up on our SPENT study we ran over the fall and spring 2017/18 terms we contacted participants once more at the end of May 2018 in order to solicit one more set of responses to the survey. This way, we can see how the size of the effect remained over a longer period of time (ranging from a couple weeks to 6 months).
+
+So, let's bring in the time 3 data
+
+```{r t3, echo}
+t3_data <- read.csv("Study_2b_T3.csv", stringsAsFactors = FALSE)
+
+# Run all the same compositing as the previous two studies
+cols_7pt <- c(18,26,33,37,17,20,22,23,29,32,35,39,47,48,49)
+t3_data[cols_7pt] <- apply(t3_data[cols_7pt], MARGIN = 2, function(x) x <- 8 - x)
+
+col.ind.att <- c(18,19,25,26,27,30,33,34,36,37,38,40,41,42,44,45,46)
+col.sys.att <- c(17,20,21,22,23,24,29,31,32,35,39)
+t3_data$disp <- rowMeans(t3_data[,col.ind.att], na.rm = TRUE)
+t3_data$sit <- rowMeans(t3_data[,col.sys.att], na.rm = TRUE)
+
+# tolerance for inequality (columns 47-51)
+col.toltotal <- c(47,48,49,50,51)
+t3_data$seis <- rowMeans(t3_data[,col.toltotal], na.rm = TRUE)
+
+# attributions for obesity (columns 52-66)
+col.obese.int <- c(53,55,56,57,58,59,61,62)
+col.obese.sit <- c(52,54,60,66)
+col.obese.phy <- c(63,64,65)
+
+t3_data$obese.int <- rowMeans(t3_data[,col.obese.int], na.rm = TRUE)
+t3_data$obese.sit <- rowMeans(t3_data[,col.obese.sit], na.rm = TRUE)
+t3_data$obese.phy <- rowMeans(t3_data[,col.obese.phy], na.rm = TRUE)
+
+# attributions for wealth (columns 68-71)
+col.wealth.int <- c(68,69)
+col.wealth.sit <- c(70,71)
+
+t3_data$wealth.int <- rowMeans(t3_data[,col.wealth.int], na.rm = TRUE)
+t3_data$wealth.sit <- rowMeans(t3_data[,col.wealth.sit], na.rm = TRUE)
+
+# attributions for financial situation broadly (columns 72-86)
+col.finsit.int <- c(72,73,74,82,86)
+col.finsit.sit <- c(75,76,79,80,81)
+col.finsit.fam <- c(77,78,83)
+col.finsit.luck <- c(84,85)
+
+t3_data$finsit.int <- rowMeans(t3_data[,col.finsit.int], na.rm = TRUE)
+t3_data$finsit.sit <- rowMeans(t3_data[,col.finsit.sit], na.rm = TRUE)
+t3_data$finsit.fam <- rowMeans(t3_data[,col.finsit.fam], na.rm = TRUE)
+t3_data$finsit.luck <- rowMeans(t3_data[,col.finsit.luck], na.rm = TRUE)
+
+# attributions for crime (columns 87-98)
+# The Effect of Personal Theories about the Causes of
+# Crime on Discretionary Responses to Criminals (Perkowitz, 1984)
+col.crime.sit <- c(87,88,89,90)
+col.crime.econ <- c(91,92,93,94)
+col.crime.ind <- c(95,96,97,98)
+
+t3_data$crime.sit <- rowMeans(t3_data[,col.crime.sit], na.rm = TRUE)
+t3_data$crime.econ <- rowMeans(t3_data[,col.crime.econ], na.rm = TRUE)
+t3_data$crime.ind <- rowMeans(t3_data[,col.crime.ind], na.rm = TRUE)
+
+# perceived causes of inequality (columns 99-110)
+# Kraus, Piff, and Keltner (2009)
+col.ineq.sit <- c(99,100,101,102,103,104,105)
+col.ineq.ind <- c(106,107,108,109,110)
+
+t3_data$ineq.sit <- rowMeans(t3_data[,col.ineq.sit], na.rm = TRUE)
+t3_data$ineq.ind <- rowMeans(t3_data[,col.ineq.ind], na.rm = TRUE)
+
+# causal attributions (columns 121-126)
+col.causalatts <- c(121,122,123,124,125,126)
+
+t3_data$causalatts <- rowMeans(t3_data[,col.causalatts], na.rm = TRUE)
+
+# support for redistribution (columns 111-114)
+col.redist <- c(111,112,113,114)
+col.govcan <- c(113,114)
+col.govshould <- c(111,112)
+
+t3_data$redist <- rowMeans(t3_data[,col.redist], na.rm = TRUE)
+t3_data$govcan <- rowMeans(t3_data[,col.govcan], na.rm = TRUE)
+t3_data$govshould <- rowMeans(t3_data[,col.govshould], na.rm = TRUE)
+
+# meritocracy (columns 115-120)
+col.merit <- c(115,116,117,118,119,120)
+
+t3_data$merit <- rowMeans(t3_data[,col.merit], na.rm = TRUE)
+```
+
+Now, to take a look at how time 3 fares, I'm going to merge the t3 data in with the previous merged file.
+
+```{r joining all data, echo = TRUE}
+three_merged <- merge(t3_data, merged, by="pcode", all.x=TRUE)
+```
+
+By doing an inner join of the two datasets, we've only kept the participants who participated this third time. Let's look at the mean differences in support for inequality across the three times.
+
+```{r t3 testing, echo}
+t.test(sit~cond, data=three_merged, var.equal=TRUE)
+t.test(seis~cond, data=three_merged, var.equal=TRUE)
+t.test(redist~cond, data=three_merged, var.equal=TRUE)
+```
+
+```{r t3 eff size, echo}
+effsize::cohen.d(three_merged$sit~three_merged$cond)
+effsize::cohen.d(three_merged$seis~three_merged$cond)
+effsize::cohen.d(three_merged$redist~three_merged$cond)
+```
+
+Right off the bat, I want to explore whether this effect is being driven by the people who correctly guessed the hypothesis versus those who did not (on a MC question). So, I split the merged data into those who got the question correct (deb.right) and those who got it wrong (deb.wrong).
+
+```{r subgroups, echo}
+deb.right <- three_merged[ which(three_merged$close.cond.check == 4),]
+deb.wrong <- three_merged[ which(three_merged$close.cond.check != 4),]
+
+t.test(seis~cond, data=deb.right, var.equal=TRUE)
+t.test(seis~cond, data=deb.wrong, var.equal=TRUE)
+t.test(sit~cond, data=deb.right, var.equal=TRUE)
+t.test(sit~cond, data=deb.wrong, var.equal=TRUE)
+```
+
+Hm. At first blush here it seems like the effect is being entirely driven by the people who recalled what the experiment was about. However, before we asked people to answer the question we asked them to free recall the hypothesis.
+
+```{r remerge 2, echo = TRUE}
+# Need to bring condition variable into the time 2
+t3_data$cond <- NA
+t3_data$cond <- study2b$cond[match(t3_data$pcode, study2b$pcode)]
+
+# Now merge long, first remove the two placeholder columns I needed earlier to keep the column numbers consistent with t1
+t3_data$place1 <- t3_data$place2 <- t3_data$recall.part <- t3_data$open.check <- t3_data$recall.cond <- t3_data$cond.descript <- t3_data$recall.hyp <- t3_data$hyp.describe <- t3_data$close.cond.check <- study2b$V1 <- t2_data$V1 <- t3_data$V1 <- NULL
+
+# Merge
+t3_data$pid <- 0
+three_merged_long <- rbind(study2b, t2_data, t3_data)
+```
+
+```{r all seis, warning=FALSE, echo=TRUE, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+i <- ggplot(data=three_merged_long, aes(x=time, y=seis, color=as.factor(cond))) + geom_line(stat="summary", fun.y='mean', position=position_dodge(), size = 1.5) + labs(y='SEIS', x = 'Time') + ggtitle('SEIS by Condition and Time') + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black", size=1), plot.title = element_text(hjust = 0.5)) + scale_x_discrete(limits=c(1,2,3), labels = c('Immediate', 'One day\nlater', "Average five\nmonths later")) + coord_cartesian(ylim=c(2,3.5)) + theme(text = element_text(size=15)) + guides(color=guide_legend(title='Condition')) + scale_color_brewer(breaks = c(1,2), palette='Dark2', labels=c("SPENT", "No-Game Control")) + geom_point(stat="summary", fun.y='mean', position=position_dodge(), size = 3.5)
+i
+```
+
+```{r num days, echo}
+# Turn the first and last days into dates
+three_merged$day1 <- three_merged$V8.x
+three_merged$day1 <- substr(three_merged$day1, start = 1, stop = 10)
+three_merged$day1 <- as.Date(three_merged$day1, format="%d/%m/%Y")
+three_merged$day3 <- three_merged$V8
+three_merged$day3 <- substr(three_merged$day3, start = 1, stop = 10)
+three_merged$day3 <- as.Date(three_merged$day3, format="%d/%m/%Y")
+
+# Get the number of days
+three_merged$num.days <- three_merged$day3 - three_merged$day1
+three_merged$num.days <- as.numeric(three_merged$num.days)
+```
+
+Wow. This is wild - lets bin people into 50 day groups and see what the line graph looks like.
+
+```{r binnin days, warning=FALSE, echo=TRUE}
+attach(three_merged)
+three_merged$day.groups[num.days <=100] <- "0-100"
+three_merged$day.groups[num.days > 100 & num.days <= 150] <- "101-150"
+three_merged$day.groups[num.days > 150 & num.days <= 200] <- "151-200"
+three_merged$day.groups[num.days > 200] <- "201-250"
+detach(three_merged)
+
+# Merge the condition variable into three merged
+three_merged$cond <- NA
+three_merged$cond <- study2b$cond[match(three_merged$pcode, study2b$pcode)]
+```
+
+In the above creating the day groups, I did 0-100 for the first group because there was only two people less than 50 days.
+
+```{r t3 seis, echo=TRUE, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+i <- ggplot(data=three_merged, aes(x=day.groups, y=seis, color=as.factor(cond))) + labs(y='SEIS', x = 'Days Between Time 1 and Time 3') + ggtitle('SEIS by Condition and Days b/w Surveys') + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black", size=1), plot.title = element_text(hjust = 0.5)) + scale_x_discrete(breaks = c('0-100', '101-150', "151-200", "201-250")) + coord_cartesian(ylim=c(1.5,3.5), xlim=c(1,4)) + theme(text = element_text(size=15)) + guides(fill=FALSE, color=guide_legend(title='Condition')) + scale_color_brewer(breaks = c(1,2), palette='Dark2', labels=c("SPENT", "No-Game Control")) + geom_point(stat="summary", fun.y='mean', position=position_dodge(), size = 3.5, aes(color=as.factor(cond)))
+i 
+```
+
+Quick crosstab of the time three means by condition and number of days:
+
+```{r crosstab, echo}
+nn <- xtabs(~day.groups+cond,three_merged)
+xtabs(seis~day.groups+cond,three_merged)/nn
+
+```
+
+```{r confirm test time 3, echo = TRUE}
+t.test(three_merged$sit~three_merged$cond, var.equal=TRUE) # hyp 1.1
+t.test(three_merged$disp~three_merged$cond, var.equal=TRUE) # hyp 1.2
+t.test(three_merged$seis~three_merged$cond, var.equal=TRUE) # hyp 1.3
+t.test(three_merged$redist~three_merged$cond, var.equal=TRUE) # hyp 1.4
+
+effsize::cohen.d(three_merged$seis~three_merged$cond) 
+effsize::cohen.d(three_merged$sit~three_merged$cond)# hyp 1.3
+pwr.t.test(d= 0.48, n=115, sig.level=.05, type='two')
+pwr.t.test(d= 0.47, n=115, sig.level=.05, type='two')
+```
+
+
+```{r mediation 3, echo = TRUE}
+model3 <- ' # direct effect
+             seis ~ c*cond
+# mediators
+sit ~ a1*cond
+seis ~ b1*sit
+# indirect effects (a1*b)
+a1b1 := a1*b1
+# total effect
+total := c + (a1*b1)
+'
+
+fit3 <- sem(model3, data = t3_data)
+summary(fit3, fit.measures = TRUE)
+```
+
+ 
+
