@@ -1,0 +1,1 @@
+Here you will find all of the code and data files for Studies 2a and 2b of my dissertation. These are the studies using the SPENT manipulation to explore how perspective taking influences attributions for poverty and then downstream support for economic inequality.
