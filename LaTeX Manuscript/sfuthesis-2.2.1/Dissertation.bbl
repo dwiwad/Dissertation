@@ -1,0 +1,677 @@
+\begin{thebibliography}{100}
+
+\bibitem{allison09}
+P~D Allison.
+\newblock {\em Missing Data}.
+\newblock The SAGE Handbook of Quantitative Methods in Psychology. SAGE
+  Publications Inc., Thousand Oaks, CA, 2009.
+
+\bibitem{ariely00}
+D~Ariely and J~Levav.
+\newblock Sequential choice in group settings: Taking the road less traveled
+  and less enjoyed.
+\newblock {\em Journal of Consumer Research}, 27(3):279--290, 2000.
+
+\bibitem{aron97}
+A~Aron, E~Melinat, E~N Aron, R~D Vallone, and R~J Bator.
+\newblock The experimental generation of interpersonal closeness: A procedure
+  and some preliminary findings.
+\newblock {\em Personality and Social Psychology Bulletin}, 23(4):363--377,
+  1997.
+
+\bibitem{baron86}
+R~M Baron and D~A Kenny.
+\newblock The moderator-mediator variable distinction in social psychological
+  research: Conceptual, strategic, and statistical considerations.
+\newblock {\em Journal of Personality and Social Psychology}, 51(6):1173--1182,
+  1986.
+
+\bibitem{baylor}
+A~A Beaujean.
+\newblock {\em BaylorEdPsych: R Package for Baylor University Educational
+  Psychology Quantitative Courses}, 2012.
+\newblock R package version 0.5.
+
+\bibitem{bem72}
+D~J Bem.
+\newblock Social perception theory.
+\newblock {\em Advances in Experimental Social Psychology}, 6:1--62, 1972.
+
+\bibitem{ashok15}
+Brookings Papers on Economic Activity.
+\newblock {\em Support for Redistribution in an Age of Rising Inequality: New
+  Stylized Facts and some Tentative Explanations}, 2015.
+
+\bibitem{bullock95}
+H~E Bullock.
+\newblock {\em Class acts: Middle-class responses to the poor}, pages 118--159.
+\newblock The Social Psychology of Interpersonal Discrimination. Guilford
+  Press, New York, NY, 1995.
+
+\bibitem{bullock03}
+H~E Bullock, W~R Williams, and W~M Limbert.
+\newblock Predicting support for welfare policies: The impact of attributions
+  and beliefs about inequality.
+\newblock {\em Journal of Poverty}, 7(3):35--56, Jun 2003.
+
+\bibitem{carden17}
+S~W Carden, N~S Holtzman, and M~J Strube.
+\newblock Cahost: An excel workbook for facilitating the johnson-neyman
+  technique for two-way interactions in multiple regression.
+\newblock {\em Frontiers in Psychology}, 8, Jul 2017.
+
+\bibitem{champely18}
+S~Champely.
+\newblock {\em pwr: Basic Functions for Power Analysis}, 2012.
+\newblock R package version 1.2-2.
+
+\bibitem{correia01}
+I~Correia, J~Vala, and P~Aguiar.
+\newblock The effect of belief in a just world and victim's innocence on
+  secondary victimization, judgments of justice and deservingness.
+\newblock {\em Social Justice Research}, 14(3):327--342, 2001.
+
+\bibitem{costa94}
+P~T Costa and R~R McCrae.
+\newblock {\em Stability and Change in Personality from Adolescence Through
+  Adulthood}, pages 139--150.
+\newblock The Developing Structure of Temperament and Personality from Infancy
+  to Adulthood. Lawrence Erlbaum Associates, Inc, Hillsdale, NJ, 1994.
+
+\bibitem{cozzarelli01}
+C~Cozzarelli, A~V Wilkinson, and M~J Tagler.
+\newblock Attitudes towards the poor and attributions for poverty.
+\newblock {\em Journal of Poverty}, 57(2):201--227, 2001.
+
+\bibitem{davidai16}
+S~Davidai and T~Gilovich.
+\newblock The headwinds/tailwinds asymmetry: An availability bias in
+  assessments of barriers and blessings.
+\newblock {\em Journal of Personality and Social Psychology}, 111(6):835--851,
+  2016.
+
+\bibitem{davis80}
+M~H Davis.
+\newblock A multidimensional approach to individual differences in empathy.
+\newblock {\em JSAS Catalog of Selected Documents in Psychology}, 10:85--104,
+  1980.
+
+\bibitem{desilver14}
+D~DeSilver.
+\newblock 5 facts about inequality, Jan 2014.
+
+\bibitem{engel02}
+K~Engel and P~McCoy.
+\newblock A tale of three markets: The law and economics of predatory lending.
+\newblock {\em Texas Law Review}, 80:1255--1381, 2002.
+
+\bibitem{feagin75}
+J~R Feagin.
+\newblock {\em Subordinating the Poor: Welfare and American Beliefs}.
+\newblock Prentice-Hall, Englewood Cliffs, NJ, 1975.
+
+\bibitem{feather74}
+N~T Feather.
+\newblock Explanations of poverty in australian and american samples.
+\newblock {\em Australian Journal of Psychology}, 26(3):199--216, 1974.
+
+\bibitem{fiske02}
+S~T Fiske, A~J~C Cuddy, P~Glick, and J~Xu.
+\newblock A model of (often mixed) stereotype content: Competence and warmth
+  respectively follows from perceived status and competition.
+\newblock {\em Journal of Personality and Social Psychology}, 82(6):878--902,
+  2002.
+
+\bibitem{forgas82}
+J~P Forgas, S~L Morris, and A~Furnham.
+\newblock Lay explanations of wealth: Attributions for economic success.
+\newblock {\em Journal of Applied Social Psychology}, 12(5):381--397, 1982.
+
+\bibitem{furnham83}
+A~Furnham.
+\newblock Attributions for affluence.
+\newblock {\em Personality and Individual Differences}, 4(1):31--40, 1983.
+
+\bibitem{furnham84}
+A~Furnham and B~Gunter.
+\newblock Just world beliefs and attitudes towards the poor.
+\newblock {\em British Journal of Social Psychology}, 23:265--269, 1984.
+
+\bibitem{gilbert95}
+D~T Gilbert and P~S Malone.
+\newblock The correspondence bias.
+\newblock {\em Psychological Bulletin}, 117(1):21--38, 1995.
+
+\bibitem{grau88}
+L~Grau.
+\newblock Illness-engendered poverty among the elderly.
+\newblock {\em Women and Health}, 12:103--118, 1988.
+
+\bibitem{issp09}
+ISSP~Research Group.
+\newblock {\em International Social Survey Programme: Social Inequality IV -
+  ISSP 2009}.
+\newblock GESIS Data Archive, Cologne. ZA5400 Data file Version 4.0.0,
+  doi:10.4232/1.12777, 2017.
+
+\bibitem{guimond89}
+S~Guimond, G~Begin, and D~L Palmer.
+\newblock Educational and causal attributions: The development of
+  "person-blame" and "system-blame" ideology.
+\newblock {\em Social Psychology Quarterly}, 52(2):126--140, 1989.
+
+\bibitem{gurwitz77}
+S~B Gurwitz and K~A Dodge.
+\newblock Effects of confirmations and disconfirmations on stereotype-based
+  attributions.
+\newblock {\em Journal of Personality and Social Psychology}, 35(7):495--500,
+  1977.
+
+\bibitem{halpern93}
+R~Halpern.
+\newblock The societal context of home visiting and related services for
+  families in poverty.
+\newblock {\em The Future of Children}, 3(3):158--171, 1993.
+
+\bibitem{hayes13}
+A~F Hayes.
+\newblock {\em Introduction to Mediation, Moderation, and Conditional Process
+  Analysis: A Regression Based Approach}.
+\newblock The Guildford Press, New York, NY, 2013.
+
+\bibitem{he11}
+Y~He, R~Yucel, and T~E Raghunathan.
+\newblock A functional multiple imputation approach to incomplete longitudinal
+  data.
+\newblock {\em Statistics in Medicine}, 30:1137--1156, 2011.
+
+\bibitem{heider58}
+F~Heider.
+\newblock {\em The Psychology of Interpersonal Relations}.
+\newblock John Wiley \& Sons, Hoboken, NJ, 1958.
+
+\bibitem{hirschl15}
+T~A Hirschl and Mark~R Rank.
+\newblock The life course dynamics of affluence.
+\newblock {\em PLOS ONE}, 10(1):e0116370, Jan 2015.
+
+\bibitem{hooper15}
+N~Hooper, A~Erdogan, G~Keen, K~Lawton, and L~McHugh.
+\newblock Perspective taking reduces the fundamental attribution error.
+\newblock {\em Journal of Contextual Behavioral Science}, 4(2):69--72, 2015.
+
+\bibitem{horbergunpub}
+E~J Horberg, P~K Piff, and B~Monin.
+\newblock An embarassment of riches: Wealth guilt and the rejection of
+  conspicuous consumption.
+\newblock 2016.
+
+\bibitem{inequalityorg17}
+Inequality.org.
+\newblock Facts: Wealth inequality in the united states, 2017.
+
+\bibitem{inglehart}
+R~Inglehart, C~Haerpfer, A~Moreno, C~Welzel, K~Kizilova, J~Diez-Medrano,
+  M~Lagos, P~Norris, E~Ponarin, and B~Puranin.
+\newblock {\em World Values Survey: Round Four - Country-Pooled Datafile},
+  2014.
+
+\bibitem{ioannidis05}
+J~P~A Ioannidis.
+\newblock Why most published research findings are false.
+\newblock {\em PLoS Medicine}, 2(8):e124, Aug 2005.
+
+\bibitem{jones65}
+E~E Jones and K~E Davis.
+\newblock From acts to dispositions: The attribution process in person
+  perception.
+\newblock {\em Advances in Experimental Social Psychology}, 2:219--266, 1965.
+
+\bibitem{jones67}
+E~E Jones and V~A Harris.
+\newblock The attribution of attitudes.
+\newblock {\em Journal of Experimental social Psychology}, 3:1--24, 1967.
+
+\bibitem{kawachi97}
+I~Kawachi, B~P Kennedy, K~Lochner, and D~Prothrow-Stith.
+\newblock Social capital, income inequality, and mortality.
+\newblock {\em American Journal of Public Health}, 87(9):1491--1498, 1997.
+
+\bibitem{kelley67}
+H~H Kelley.
+\newblock Attribution theory in social psychology.
+\newblock In {\em Nebraska Symposium on Motivation}, pages 192--238, 15.
+
+\bibitem{kelley73}
+H~H Kelley.
+\newblock The processes of causal attribution.
+\newblock {\em American Psychologist}, 28(2):107--128, 1973.
+
+\bibitem{kiatpongsan14}
+S~Kiatpongsan and M~I Norton.
+\newblock How much (more) should ceos make? a universal desire for more equal
+  pay.
+\newblock {\em Perspectives on Psychological Science}, 9(6):587--593, Nov 2014.
+
+\bibitem{killip04}
+S~Killip, Z~Mahfoud, and K~Pearce.
+\newblock What is an intracluster correlation coefficient? crucial concepts for
+  primary care researchers.
+\newblock {\em Annals of Family Medicine}, 2(3):204--208, 2004.
+
+\bibitem{klaczynski04}
+P~A Klaczynski, K~W Goold, and J~J Mudry.
+\newblock Culture of obesity stereotypes, self-esteem, and the "thin ideal": A
+  social identity perspective.
+\newblock {\em Journal of Youth and Adolescence}, 33(4):307--317, 2004.
+
+\bibitem{kluegel86}
+J~R Kluegel and E~R Smith.
+\newblock {\em Social Institutions and Social Change. Beliefs about Inequality:
+  Americans' View of What is and What Ought to be}.
+\newblock Aldine de Gruyter, Hawthorne, NY, 1986.
+
+\bibitem{kraus09}
+M~W. Kraus, P~K Piff, and D~Keltner.
+\newblock Social class, sense of control, and social explanation.
+\newblock {\em Journal of Personality and Social Psychology}, 97(6):992--1004,
+  2009.
+
+\bibitem{krohn76}
+M~D Krohn.
+\newblock Inequality, unemployment and crime: A cross-national analysis.
+\newblock {\em The Sociological Quarterly}, 17(3):303--313, 1976.
+
+\bibitem{kruglanski75}
+A~W Kruglanski.
+\newblock The endogenous-exogenous partition in attribution theory.
+\newblock {\em Psychological Review}, 82(6):387--406, 1975.
+
+\bibitem{lakens14}
+D~Lakens.
+\newblock Performing high-powered studies efficiently with sequential analyses.
+\newblock {\em European Journal of Social Psychology}, 44(7):701--710, Aug
+  2014.
+
+\bibitem{lee96}
+F~Lee, M~Hallahan, and T~Herzon.
+\newblock Explaining real life events: How culture and domain shape
+  attributions.
+\newblock {\em Personality and Social Psychology Bulletin}, 22(7):732--741,
+  1996.
+
+\bibitem{lewin35}
+K~Lewin.
+\newblock {\em The Dynamic Theory of Personality}.
+\newblock McGraw-Hill, New York, NY, 1935.
+
+\bibitem{lichbach89}
+M~I Lichbach.
+\newblock An evaluation of ``does economic inequality breed political
+  conflict?'' studies.
+\newblock {\em World Politics}, 41(04):431--470, Jul 1989.
+
+\bibitem{little81}
+R~J~A Little.
+\newblock A test of missing completely at random for multivariate data with
+  missing values.
+\newblock {\em Journal of the American Statistical Association},
+  83(404):1198--1202, 1988.
+
+\bibitem{macleod99}
+L~MacLeod, D~Montero, and A~Speer.
+\newblock America's changing attitudes toward welfare and welfare recipients,
+  1938-1995.
+\newblock {\em The Journal of Sociology and Social Welfare}, 26(2):175--186,
+  1999.
+
+\bibitem{malek17}
+A~Malek, Y~Chow, S~Katariya, and M~Ghavamzadeh.
+\newblock Sequential multiple hypothesis testing with type i error control.
+\newblock {\em Proceedings of the 20th International Conference on Artificial
+  Intelligence and Statistics}, 54:1468--1476, 2017.
+
+\bibitem{mani13}
+A~Mani, S~Mullainathan, E~Shafir, and J~Zhao.
+\newblock Poverty impedes cognitive function.
+\newblock {\em Science}, 341(6149):976--980, 2013.
+
+\bibitem{mccall17}
+L~McCall, D~Burk, M~Laperri{\`e}re, and J~A Richeson.
+\newblock Exposure to rising inequality shapes americans' opportunity beliefs
+  and policy support.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  114(36):9593--9598, Aug 2017.
+
+\bibitem{mccarthy16}
+J~McCarthy.
+\newblock Economy continues to rank as top u.s. problem.
+
+\bibitem{mchugh12}
+L~McHugh and I~Stewart, editors.
+\newblock {\em The Self and Perspective Taking: Contributions and Applications
+  from Modern Behavioral Science}.
+\newblock Context Press, Oakland, CA, 1 edition, 2012.
+
+\bibitem{menzel14}
+N~Menzel, L~H Willson, and J~Doolen.
+\newblock Effectiveness of a poverty simulation in second
+  life{\textregistered}: Changing nursing student attitudes toward poor people.
+\newblock {\em International Journal of Nursing Education Scholarship}, 11(1),
+  Jan 2014.
+
+\bibitem{mercierunpub}
+B~Mercier, D~Wiwad, P~K Piff, L~B Aknin, A~R Robinson, and A~F Shariff.
+\newblock Does belief in free will increase support for economic inequality?
+\newblock https://psyarxiv.com/k45ud/.
+
+\bibitem{miller81}
+F~D Miller, E~R Smith, and J~Uleman.
+\newblock Measurement and interpretation of situational and dispositional
+  attributions.
+\newblock {\em Journal of Experimental social Psychology}, 17(1):80--95, 1981.
+
+\bibitem{miller84}
+J~G Miller.
+\newblock Culture and development of everyday social explanation.
+\newblock {\em Journal of Personality and Social Psychology}, 46(5):961--978,
+  1984.
+
+\bibitem{morris94}
+M~W Morris and K~Peng.
+\newblock Culture and cause: American and chinese attributions for social and
+  physical events.
+\newblock {\em Journal of Personality and Social Psychology}, 67(6):949--971,
+  1994.
+
+\bibitem{murphy01}
+C~N Murphy.
+\newblock Political causes of new inequality.
+\newblock {\em International Studies Quarterly}, 45:347--356, 2001.
+
+\bibitem{nickols11}
+S~Y Nickols and R~B Nielsen.
+\newblock "so many people are struggling'': Developing social empathy through a
+  poverty simulation.
+\newblock {\em Journal of Poverty}, 15(1):22--42, Jan 2011.
+
+\bibitem{norton11}
+M~I Norton and D~Ariely.
+\newblock Building a better america---one wealth quintile at a time.
+\newblock {\em Perspectives on Psychological Science}, 6(1):9--12, Jan 2011.
+
+\bibitem{obama13}
+B~H Obama.
+\newblock Inaugural address by president barack obama, January 2013.
+
+\bibitem{obrien79}
+P~C O'Brien and T~R Fleming.
+\newblock A multiple testing procedure for clinical trials.
+\newblock {\em Biometrics}, 35:549--556, 1979.
+
+\bibitem{osborne15}
+D~Osborne and B~Weiner.
+\newblock A latent profile analysis of attributions for poverty: Identifying
+  response patterns underlying people's willingness to help the poor.
+\newblock {\em Personality and Individual Differences}, 85:149--154, Oct 2015.
+
+\bibitem{pellegrino17}
+R~Pellegrino, C~Sinding, R~A de~Wijk, and T~Hummel.
+\newblock Habituation and adaptation to odors in humans.
+\newblock {\em Physiology \& Behavior}, 177:13--19, Aug 2017.
+
+\bibitem{persson94}
+T~Persson and G~Tabellini.
+\newblock Is inequality harmful for growth?
+\newblock {\em The American Economic Review}, 84(3):600--621, 1994.
+
+\bibitem{petersen82}
+C~Petersen, A~Semmel, C~von Baeyer, L~Y Abramson, G~I Metalsky, and M~E~P
+  Seligman.
+\newblock The attributional style questionnaire.
+\newblock {\em Cognitive Therapy and Research}, 6(3):287--300, 1982.
+
+\bibitem{pettigrew79}
+T~F Pettigrew.
+\newblock The ultimate attribution error: Extending allport's cognitive
+  analysis of prejudice.
+\newblock {\em Personality and Social Psychology Bulletin}, 5(4):461--476,
+  1979.
+
+\bibitem{piff10}
+P~K Piff, M~W Kraus, S~C{\^o}t{\'e}, B~H Cheng, and D~Keltner.
+\newblock Having less, giving more: The influence of social class on prosocial
+  behavior.
+\newblock {\em Journal of Personality and Social Psychology}, 99(5):771--784,
+  2010.
+
+\bibitem{piff18}
+P~K Piff, M~W Kraus, and D~Keltner.
+\newblock Unpacking the inequality paradox: The psychological roots of
+  inequality and social class.
+\newblock {\em Advances in Experimental Social Psychology}, 57:53--124, 2018.
+
+\bibitem{piketty14}
+T~Piketty and E~Saez.
+\newblock Inequality in the long run.
+\newblock {\em Science}, 344(6186):838--843, 2014.
+
+\bibitem{rcore}
+{R Core Team}.
+\newblock {\em R: A Language and Environment for Statistical Computing}.
+\newblock R Foundation for Statistical Computing, Vienna, Austria, 2017.
+
+\bibitem{rank15}
+M~R Rank and T~A Hirschl.
+\newblock The likelihood of experiencing relative poverty over the life course.
+\newblock {\em PLOS ONE}, 10(7):e0133513, Jul 2015.
+
+\bibitem{revelle17}
+W~Revelle.
+\newblock {\em psych: Procedures for Psychological, Psychometric, and
+  Personality Research}.
+\newblock Northwestern University, Evanston, Illinois, 2018.
+\newblock R package version 1.8.4.
+
+\bibitem{ross77}
+L~Ross.
+\newblock The intuitive psychologist and his shortcomings: Distortions in the
+  attribution process.
+\newblock {\em Advances in Experimental Social Psychology}, 10:173--220, 1977.
+
+\bibitem{rosseel12}
+Y~Rosseel.
+\newblock {lavaan}: An {R} package for structural equation modeling.
+\newblock {\em Journal of Statistical Software}, 48(2):1--36, 2012.
+
+\bibitem{rothbart81}
+M~Rothbart.
+\newblock {\em Memory Processes and Social Beliefs}.
+\newblock Erlbaum, Hillsdale, NJ, 1981.
+
+\bibitem{rstudio16}
+{RStudio Team}.
+\newblock {\em RStudio: Integrated Development Environment for R}.
+\newblock RStudio, Inc., Boston, MA, 2016.
+
+\bibitem{rucker11}
+D~D Rucker, K~J Preacher, Z~L Tormala, and R~E Petty.
+\newblock Mediation analysis in social psychology: Current practices and new
+  recommendations.
+\newblock {\em Social and Personality Psychology Compass}, 5(6):359--371, 2011.
+
+\bibitem{sands17}
+M~L Sands.
+\newblock Exposure to inequality affects support for redistribution.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  114(4):663--668, Jan 2017.
+
+\bibitem{schonbrodt13}
+F~D Sch{\"o}nbrodt and M~Perugini.
+\newblock At what sample size do correlations stabilize?
+\newblock {\em Journal of Research in Personality}, 47:609--612, 2013.
+
+\bibitem{shariff14}
+A~F Shariff, J~D Greene, J~C Karremans, J~B Luguri, C~J Clark, J~W Schooler,
+  R~F Baumeister, and K~D Vohs.
+\newblock Free will and punishment: A mechanistic view of human nature reduces
+  retribution.
+\newblock {\em Psychological Science}, 25(8):1563--1570, 2014.
+
+\bibitem{shrout02}
+P~E Shrout and N~Bolger.
+\newblock Mediation in experimental and nonexperimental studies: New procedures
+  and recommendations.
+\newblock {\em Psychological Methods}, 7(4):422--445, 2002.
+
+\bibitem{simmons11}
+J~P Simmons, L~D Nelson, and U~Simonsohn.
+\newblock False-positive psychology: Undisclosed flexibility in data collection
+  and analysis allows presenting anything as significant.
+\newblock {\em Psychological Science}, 22(11):1359--1366, 2011.
+
+\bibitem{smith93}
+P~B Smith and M~H Bond.
+\newblock {\em Social Psychology Across Cultures}.
+\newblock Harvester Wheatsheaf, Hemel Hempstead, UK, 1993.
+
+\bibitem{solomon78}
+S~Solomon.
+\newblock Measuring dispositional and situational attributions.
+\newblock {\em Personality and Social Psychology Bulletin}, 4(4):589, 594 1978.
+
+\bibitem{sotirovic01}
+M~Sotirovic.
+\newblock Media use and perceptions of welfare.
+\newblock {\em Journal of Communication}, 51(4):750--774, 2001.
+
+\bibitem{specht11}
+J~Specht, B~Egloff, and S~C Schmukle.
+\newblock Stability and change of personality across the life course: The
+  impact of age and major life events on mean-level and rank-order stability of
+  the big five.
+\newblock {\em Journal of Personality and Social Psychology}, 101(4):862--882,
+  2011.
+
+\bibitem{statcan18}
+{Statistics Canada}.
+\newblock {\em Low income cut-offs (LICOs) before and after tax by community
+  size and family size, in current dollars}.
+\newblock https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110024101,
+  November 2018.
+
+\bibitem{storms73}
+M~D Storms.
+\newblock Videotape and the attribution process: Reversing actors' and
+  observers' point of view.
+\newblock {\em Journal of Personality and Social Psychology}, 27(2):165--175,
+  1973.
+
+\bibitem{taylor75}
+S~E Taylor and S~T Fiske.
+\newblock Point of view and perceptions of causality.
+\newblock {\em Journal of Personality and Social Psychology}, 32(3):439--445,
+  1975.
+
+\bibitem{taylor76}
+S~E Taylor and J~H Kouvumaki.
+\newblock The perception of self and others: Acquaintanceship, affect, and
+  actor-observer differences.
+\newblock {\em Journal of Personality and Social Psychology}, 33(4):403--408,
+  1976.
+
+\bibitem{worldbank14}
+{The World Bank}.
+\newblock Gini index (world bank estimate), 2014.
+
+\bibitem{worldbank15}
+{The World Bank}.
+\newblock Gdp per capita (current us \$), 2015.
+
+\bibitem{torchiano17}
+M~Torchiano.
+\newblock {\em effsize: Efficient Effect Size Computation}, 2017.
+\newblock R package version 0.7.1.
+
+\bibitem{trafimow91}
+D~Trafimow, H~C Triandis, and S~G Goto.
+\newblock Some tests of the distinction between the private self and the
+  collective self.
+\newblock {\em Journal of Personality and Social Psychology}, 5(649-655), 60.
+
+\bibitem{vanbuuren11}
+S~{van Buuren} and K~Groothuis-Oudshoorn.
+\newblock {mice}: Multivariate imputation by chained equations in r.
+\newblock {\em Journal of Statistical Software}, 45(3):1--67, 2011.
+
+\bibitem{wald47}
+A~Wald.
+\newblock {\em Sequential Analysis}.
+\newblock John Wiley \& Sons, New York, NY, 1947.
+
+\bibitem{weiner85}
+B~Weiner.
+\newblock An attributional theory of achievement and motivation.
+\newblock {\em Psychological Review}, 92(4):548--573, 1985.
+
+\bibitem{white59}
+R~W White.
+\newblock Motivation reconsidered: The concept of competence.
+\newblock {\em Psychological Review}, 66(5):297--333, 1959.
+
+\bibitem{wilkinson17}
+R~Wilkinson and K~Pickett.
+\newblock Inequality and mental illness.
+\newblock {\em The Lancet: Psychiatry}, 4:512--513, 2017.
+
+\bibitem{wilkinson06b}
+R~G Wilkinson.
+\newblock The impact of inequality.
+\newblock {\em Social Research}, 73(2):711--732, 2006.
+
+\bibitem{wilkinson06}
+R~G Wilkinson and K~E Pickett.
+\newblock Income inequality and population health: A review and explanation of
+  the evidence.
+\newblock {\em Social Science and Medicine}, 62(7):1768--1784, 2006.
+
+\bibitem{wilson97}
+M~Wilson and M~Daly.
+\newblock Life expectancy, economic inequality, homicide, and reproductive
+  timing in chicago neighbourhoods.
+\newblock {\em British Journal of Medicine}, 314:1271--1274, 1997.
+
+\bibitem{wiwadunpub}
+D~Wiwad, B~Mercier, M~D Maraun, A~R Robinson, P~K Piff, L~B Aknin, and A~F
+  Shariff.
+\newblock Support for economic inequality scale: Development and adjudication.
+\newblock https://psyarxiv.com/58e76/, 2018.
+
+\bibitem{Wolff10}
+E~N Wolff.
+\newblock Recent trends in household wealth in the united states: Rising debt
+  and the middle-class squeeze--an update to 2007.
+\newblock Working Paper 589, Levy Economics Institute of Bard College, 2010.
+
+\bibitem{yee06}
+N~Yee and J~Bailenson.
+\newblock Walk a mile in digital shoes: The impact of embodied
+  perspective-taking on the reduction of negative stereotyping in immersive
+  virtual environments.
+\newblock {\em Presence Teleoperators \& Virtual Environments}, pages 1--9,
+  2006.
+
+\bibitem{zimmerman13}
+J~L Zimmerman and C~Reyna.
+\newblock The meaning and role of ideology in system justification and
+  resistance for high- and low-status people.
+\newblock {\em Journal of Personality and Social Psychology}, 105(1):1--23,
+  2013.
+
+\bibitem{zucker93}
+G~S Zucker and B~Weiner.
+\newblock Conservatism and perceptions of poverty: An attributional analysis1.
+\newblock {\em Journal of Applied Social Psychology}, 23(12):925--943, Jun
+  1993.
+
+\end{thebibliography}

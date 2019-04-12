@@ -1,0 +1,147 @@
+\contentsline {chapter}{Approval}{ii}{section*.1}
+\contentsline {chapter}{Ethics Statement}{iii}{section*.3}
+\contentsline {chapter}{Abstract}{iv}{section*.4}
+\contentsline {chapter}{Dedication}{v}{section*.7}
+\contentsline {chapter}{Acknowledgements}{vi}{section*.9}
+\contentsline {chapter}{Table of Contents}{vii}{section*.10}
+\contentsline {chapter}{List of Tables}{x}{section*.11}
+\contentsline {chapter}{List of Figures}{xi}{section*.12}
+\contentsline {chapter}{Preface}{xiii}{section*.14}
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Attribution Theory}{2}{section.1.1}
+\contentsline {section}{\numberline {1.2}Biases in the Attribution Process and Attributions for Poverty}{5}{section.1.2}
+\contentsline {section}{\numberline {1.3}Dissertation Overview}{7}{section.1.3}
+\contentsline {chapter}{\numberline {2}Cross-National Exploration of Attributions for Poverty and Support for Economic Inequality}{9}{chapter.2}
+\contentsline {section}{\numberline {2.1}Study 1: Cross-national exploration of the link between attributions for poverty and support for economic inequality}{10}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Data}{10}{subsection.2.1.1}
+\contentsline {subsubsection}{Participants}{10}{section*.15}
+\contentsline {subsubsection}{Individual-Level Measures from the World Values Survey}{11}{section*.16}
+\contentsline {subparagraph}{Attributions for Poverty.}{11}{section*.17}
+\contentsline {subparagraph}{Support for Economic Inequality.}{11}{section*.18}
+\contentsline {subparagraph}{Covariates.}{11}{section*.19}
+\contentsline {subsubsection}{Country-level Measures}{12}{section*.20}
+\contentsline {subsection}{\numberline {2.1.2}Missing Data and Participant Exclusions}{12}{subsection.2.1.2}
+\contentsline {subsection}{\numberline {2.1.3}Results}{13}{subsection.2.1.3}
+\contentsline {subsubsection}{Individual-Level Analysis}{13}{section*.21}
+\contentsline {subsubsection}{Multilevel Model}{14}{section*.22}
+\contentsline {chapter}{\numberline {3}Changing Situational Attributions for Poverty Through Perspective Taking}{17}{chapter.3}
+\contentsline {section}{\numberline {3.1}Perspective Taking as a Means to Attitude Change}{17}{section.3.1}
+\contentsline {section}{\numberline {3.2}Attributions for Poverty and Support for Economic Inequality}{19}{section.3.2}
+\contentsline {section}{\numberline {3.3}Methodological Considerations}{19}{section.3.3}
+\contentsline {section}{\numberline {3.4}Study 2a: Changing Situational Attributions for Poverty via Perspective Taking and Information Presentation}{20}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Methods}{22}{subsection.3.4.1}
+\contentsline {subsubsection}{Participants}{22}{section*.23}
+\contentsline {subsubsection}{Procedure}{22}{section*.24}
+\contentsline {subsubsection}{Measures}{22}{section*.25}
+\contentsline {subparagraph}{Attributions for Poverty.}{22}{section*.26}
+\contentsline {subparagraph}{Support for Economic Inequality.}{23}{section*.27}
+\contentsline {subparagraph}{Support for Redistribution.}{23}{section*.28}
+\contentsline {subparagraph}{Empathy.}{23}{section*.29}
+\contentsline {subparagraph}{Demographics.}{23}{section*.30}
+\contentsline {subparagraph}{Participant Exclusions and Missing Data.}{24}{section*.31}
+\contentsline {subsection}{\numberline {3.4.2}Results}{24}{subsection.3.4.2}
+\contentsline {subsubsection}{Mediation Models}{25}{section*.32}
+\contentsline {subsection}{\numberline {3.4.3}Discussion}{26}{subsection.3.4.3}
+\contentsline {section}{\numberline {3.5}Study 2b: High Powered Pre-Registered Replication and Extension}{28}{section.3.5}
+\contentsline {subsection}{\numberline {3.5.1}Methods}{28}{subsection.3.5.1}
+\contentsline {subsubsection}{Sample Size Determination and a-proiri Power Analysis}{28}{section*.33}
+\contentsline {subsubsection}{Participants}{29}{section*.34}
+\contentsline {subsubsection}{Procedure}{29}{section*.35}
+\contentsline {subsubsection}{Measures}{29}{section*.36}
+\contentsline {subparagraph}{Attributions for Poverty.}{30}{section*.37}
+\contentsline {subparagraph}{Support for Economic Inequality.}{30}{section*.38}
+\contentsline {subparagraph}{Attributions for Affluence.}{30}{section*.39}
+\contentsline {subparagraph}{Attributions for Financial Situation.}{30}{section*.40}
+\contentsline {subparagraph}{Attributions for Obesity.}{30}{section*.41}
+\contentsline {subparagraph}{Attributions for Crime.}{30}{section*.42}
+\contentsline {subparagraph}{Causes of Inequality.}{31}{section*.43}
+\contentsline {subparagraph}{Broad Causal Attributions.}{31}{section*.44}
+\contentsline {subparagraph}{Support for Redistribution.}{31}{section*.45}
+\contentsline {subparagraph}{Meritocracy.}{31}{section*.46}
+\contentsline {subparagraph}{Demographics.}{31}{section*.47}
+\contentsline {subsubsection}{Participant Exclusions}{32}{section*.48}
+\contentsline {subsubsection}{Pre-Registered Hypotheses}{32}{section*.49}
+\contentsline {subsection}{\numberline {3.5.2}Results}{33}{subsection.3.5.2}
+\contentsline {subsubsection}{Four Main Hypotheses}{33}{section*.50}
+\contentsline {subsubsection}{Mediation Hypothesis}{34}{section*.51}
+\contentsline {subsubsection}{Exploratory Analyses}{35}{section*.52}
+\contentsline {subparagraph}{One Day Later}{35}{section*.53}
+\contentsline {subparagraph}{Long-term Follow Up}{35}{section*.54}
+\contentsline {subparagraph}{Time 3 Hypothesis Recollection.}{39}{section*.55}
+\contentsline {subparagraph}{Causal Attributions for Other Behaviours}{40}{section*.56}
+\contentsline {section}{\numberline {3.6}General Discussion}{41}{section.3.6}
+\contentsline {chapter}{\numberline {4}Cross-Socioeconomic Contact as a Means to Change Attributions for Poverty}{43}{chapter.4}
+\contentsline {section}{\numberline {4.1}Study 3a: Stereotype Disconfirmation and Support for Economic Inequality}{44}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Methods}{45}{subsection.4.1.1}
+\contentsline {subsubsection}{Participants}{45}{section*.57}
+\contentsline {subsubsection}{Procedure}{45}{section*.58}
+\contentsline {subparagraph}{Manipulation.}{45}{section*.59}
+\contentsline {subsubsection}{Measures}{46}{section*.60}
+\contentsline {subparagraph}{Attributions for Poverty.}{46}{section*.61}
+\contentsline {subparagraph}{Support for Economic Inequality.}{46}{section*.62}
+\contentsline {subparagraph}{Support for Redistribution.}{46}{section*.63}
+\contentsline {subparagraph}{Empathy.}{46}{section*.64}
+\contentsline {subparagraph}{Demographics.}{46}{section*.65}
+\contentsline {subsubsection}{Participant Exclusions and Missing Data}{47}{section*.66}
+\contentsline {subsection}{\numberline {4.1.2}Results}{47}{subsection.4.1.2}
+\contentsline {subsection}{\numberline {4.1.3}Discussion}{49}{subsection.4.1.3}
+\contentsline {section}{\numberline {4.2}Study 3b: Strengthening the Cross-Socioeconomic Status Contact, a High-Powered Pre-Registered Replication}{50}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Methods}{51}{subsection.4.2.1}
+\contentsline {subsubsection}{Sample Size Determination}{51}{section*.67}
+\contentsline {subsubsection}{Participants}{51}{section*.68}
+\contentsline {subsubsection}{Procedure}{51}{section*.69}
+\contentsline {subsubsection}{Measures}{52}{section*.70}
+\contentsline {subparagraph}{Attributions for Poverty.}{52}{section*.71}
+\contentsline {subparagraph}{Support for Economic Inequality.}{52}{section*.72}
+\contentsline {subparagraph}{Attributions for Affluence.}{52}{section*.73}
+\contentsline {subparagraph}{Attributions for Financial Situation.}{55}{section*.74}
+\contentsline {subparagraph}{Attributions for Obesity.}{55}{section*.75}
+\contentsline {subparagraph}{Attributions for Crime.}{55}{section*.76}
+\contentsline {subparagraph}{Causes of Inequality.}{55}{section*.77}
+\contentsline {subparagraph}{Broad Causal Attributions.}{55}{section*.78}
+\contentsline {subparagraph}{Support for Redistribution.}{55}{section*.79}
+\contentsline {subparagraph}{Meritocracy.}{55}{section*.80}
+\contentsline {subparagraph}{Demographics.}{55}{section*.81}
+\contentsline {subparagraph}{Dictator Game.}{56}{section*.82}
+\contentsline {subsubsection}{Pre-Registered Hypotheses}{56}{section*.83}
+\contentsline {subsection}{\numberline {4.2.2}Results}{57}{subsection.4.2.2}
+\contentsline {subsubsection}{Five Main Hypotheses}{57}{section*.84}
+\contentsline {subsubsection}{Mediation Models}{58}{section*.85}
+\contentsline {subsubsection}{Exploratory Analyses}{60}{section*.86}
+\contentsline {subparagraph}{Broad Causal Attributions.}{60}{section*.87}
+\contentsline {section}{\numberline {4.3}General Discussion}{61}{section.4.3}
+\contentsline {chapter}{\numberline {5}Causal Attributions for Other Behaviours}{63}{chapter.5}
+\contentsline {section}{\numberline {5.1}Study 4: Changing General Causal Attributions and Support for Economic Inequality}{63}{section.5.1}
+\contentsline {subsection}{\numberline {5.1.1}Methods}{64}{subsection.5.1.1}
+\contentsline {subsubsection}{Participants}{64}{section*.88}
+\contentsline {subsubsection}{Missing Data and Participant Exclusions}{64}{section*.89}
+\contentsline {subsubsection}{Procedure}{64}{section*.90}
+\contentsline {subsubsection}{Measures}{65}{section*.91}
+\contentsline {subparagraph}{Manipulation Check.}{65}{section*.92}
+\contentsline {subparagraph}{Attributions for Poverty.}{65}{section*.93}
+\contentsline {subparagraph}{Support for Economic Inequality.}{65}{section*.94}
+\contentsline {subparagraph}{Support for Redistribution.}{65}{section*.95}
+\contentsline {subparagraph}{Demographics.}{65}{section*.96}
+\contentsline {subsubsection}{Pre-Registered Hypotheses}{66}{section*.97}
+\contentsline {subparagraph}{Attributions for Poverty.}{66}{section*.98}
+\contentsline {subparagraph}{Support for Economic Inequality and Redistribution.}{67}{section*.99}
+\contentsline {subsection}{\numberline {5.1.2}Results}{68}{subsection.5.1.2}
+\contentsline {subsubsection}{Baseline Tests}{68}{section*.100}
+\contentsline {subsubsection}{Manipulation Check.}{68}{section*.101}
+\contentsline {subsubsection}{Confirmatory Tests.}{69}{section*.102}
+\contentsline {subsubsection}{Exploratory Analyses.}{71}{section*.103}
+\contentsline {section}{\numberline {5.2}General Discussion}{72}{section.5.2}
+\contentsline {chapter}{\numberline {6}General Discussion}{75}{chapter.6}
+\contentsline {section}{\numberline {6.1}Summary of Results}{75}{section.6.1}
+\contentsline {subsection}{\numberline {6.1.1}Are Dispositional Attributions for Poverty Associated with Support for Economic Inequality?}{75}{subsection.6.1.1}
+\contentsline {subsection}{\numberline {6.1.2}Are Attributions for Poverty Malleable, and can they be Altered to Decrease Support for Economic Inequality?}{76}{subsection.6.1.2}
+\contentsline {subsubsection}{Perspective Taking.}{76}{section*.104}
+\contentsline {subsubsection}{Stereotype Disconfirmation and Cross-SES contact.}{77}{section*.105}
+\contentsline {subsection}{\numberline {6.1.3}Is the Relationship Between Causal Attributions and Support for Economic Inequality Poverty-Specific?}{78}{subsection.6.1.3}
+\contentsline {section}{\numberline {6.2}Implications}{79}{section.6.2}
+\contentsline {subsection}{\numberline {6.2.1}Theoretical Implications}{79}{subsection.6.2.1}
+\contentsline {subsection}{\numberline {6.2.2}Practical Implications}{81}{subsection.6.2.2}
+\contentsline {section}{\numberline {6.3}Limitations}{82}{section.6.3}
+\contentsline {section}{\numberline {6.4}Future Directions}{84}{section.6.4}
+\contentsline {section}{\numberline {6.5}Conclusion}{86}{section.6.5}
+\contentsline {chapter}{Bibliography}{87}{section*.106}
