@@ -1,1 +1,1 @@
-
+To edit and compile, download the sfuthesis-2.2.1 folder in its entirety. Everything inside must be present for the compiling to work. Additionally, if you're just after the completed dissertation it is the file Dissertation.pdf
